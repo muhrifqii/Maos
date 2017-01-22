@@ -5,7 +5,7 @@ android {
   compileSdkVersion 25
   buildToolsVersion "25.0.1"
   defaultConfig {
-    applicationId "io.github.muhrifqii.learnkotlinbysample"
+    applicationId "io.github.muhrifqii.maos"
     minSdkVersion 16
     targetSdkVersion 25
     versionCode 1
@@ -14,7 +14,7 @@ android {
   }
   buildTypes {
     release {
-      minifyEnabled false
+      minifyEnabled true
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }

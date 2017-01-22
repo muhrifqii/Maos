@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/LearnKotlinBySample.iml" filepath="$PROJECT_DIR$/LearnKotlinBySample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Maos.iml" filepath="$PROJECT_DIR$/Maos.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -1,4 +1,4 @@
-package io.github.muhrifqii.learnkotlinbysample;
+package io.github.muhrifqii.maos;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package io.github.muhrifqii.learnkotlinbysample;
+package io.github.muhrifqii.maos;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
