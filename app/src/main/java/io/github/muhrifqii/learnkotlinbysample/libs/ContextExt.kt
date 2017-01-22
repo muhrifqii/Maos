@@ -22,10 +22,11 @@
  * SOFTWARE.
  */
 
-package io.github.muhrifqii.learnkotlinbysample
+package io.github.muhrifqii.learnkotlinbysample.libs
 
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
+import android.content.Context
+import android.content.Intent
+import kotlin.reflect.KClass
 
 /**
  * Created on   : 21/01/17
@@ -35,10 +36,6 @@ import android.os.Bundle
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
 
-class SplashActivity : AppCompatActivity() {
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_splash)
-  }
+inline fun Context.createIntent(clazz: KClass<*>): Intent {
+  return Intent(this, clazz.java)
 }
