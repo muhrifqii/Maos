@@ -29,6 +29,18 @@
       android:id="@+id/home"
       android:enabled="true"
       android:icon="@drawable/ic_home"
-      android:title="Nearby"
+      android:title="Home"
+      app:showAsAction="ifRoom"/>
+  <item
+      android:id="@+id/fav"
+      android:enabled="true"
+      android:icon="@drawable/ic_favorite"
+      android:title="Favorites"
+      app:showAsAction="ifRoom"/>
+  <item
+      android:id="@+id/book"
+      android:enabled="true"
+      android:icon="@drawable/ic_book"
+      android:title="Books"
       app:showAsAction="ifRoom"/>
 </menu>

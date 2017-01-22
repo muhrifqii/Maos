@@ -19,9 +19,8 @@
 
   <style name="AppTheme.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
     <item name="android:background">@color/colorPrimary</item>
-    <item name="itemBackground">?attr/selectableItemBackground</item>
-    <item name="itemIconTint">@color/white</item>
-    <item name="itemTextColor">@color/white</item>
+    <item name="itemIconTint">@drawable/bottom_nav_item_icon_tint</item>
+    <item name="itemTextColor">@drawable/bottom_nav_item_icon_tint</item>
   </style>
 
   <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
