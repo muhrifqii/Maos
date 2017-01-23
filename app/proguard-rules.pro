@@ -16,6 +16,33 @@
 #   public *;
 #}
 
+# majority rules are from -> https://github.com/krschultz/android-proguard-snippets
+
+## --------------- Start Project specifics --------------- ##
+
+# Keep the BuildConfig
+-keep class io.github.muhrifqii.maos.BuildConfig { *; }
+
+# Keep the support library
+-keep class android.support.v4.** { *; }
+-keep interface android.support.v4.** { *; }
+-keep public class android.support.v7.widget.** { *; }
+-keep public class android.support.v7.internal.widget.** { *; }
+-keep public class android.support.v7.internal.view.menu.** { *; }
+-keep public class * extends android.support.v4.view.ActionProvider {
+    public <init>(android.content.Context);
+}
+-dontwarn android.support.design.**
+-keep class android.support.design.** { *; }
+-keep interface android.support.design.** { *; }
+-keep public class android.support.design.R$* { *; }
+# Application classes that will be serialized/deserialized over Gson
+# or have been blown up by ProGuard in the past
+
+## ---------------- End Project specifics ---------------- ##
+
+-dontwarn kotlin.**
+
 ################ retrofit ###############
 # Platform calls Class.forName on types which do not exist on Android to determine platform.
 -dontnote retrofit2.Platform
@@ -27,3 +54,19 @@
 -keepattributes Signature
 # Retain declared checked exceptions for use by a Proxy instance.
 -keepattributes Exceptions
+################ moshi ##################
+-keepclassmembers class ** {
+    @com.squareup.moshi.FromJson *;
+    @com.squareup.moshi.ToJson *;
+}
+# Simple-Xml Proguard Config
+# NOTE: You should also include the Android Proguard config found with the build tools:
+# $ANDROID_HOME/tools/proguard/proguard-android.txt
+# Keep public classes and methods.
+-dontwarn com.bea.xml.stream.**
+-dontwarn org.simpleframework.xml.stream.**
+-keep class org.simpleframework.xml.**{ *; }
+-keepclassmembers,allowobfuscation class * {
+    @org.simpleframework.xml.* <fields>;
+    @org.simpleframework.xml.* <init>(...);
+}
