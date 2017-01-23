@@ -14,18 +14,12 @@
  *    limitations under the License.
  */
 
-package io.github.muhrifqii.maos.ui
+package io.github.muhrifqii.maos.ui.activities
 
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import io.github.muhrifqii.maos.R
 import io.github.muhrifqii.maos.R.layout
-import io.github.muhrifqii.maos.libs.createIntent
-import io.reactivex.Completable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
-import java.util.concurrent.TimeUnit.MILLISECONDS
 
 /**
  * Created on   : 21/01/17
@@ -35,28 +29,14 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
 
-class SplashActivity : AppCompatActivity() {
-
-  val subs: CompositeDisposable = CompositeDisposable()
+class MainActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(layout.activity_splash)
-
-    subs.add(Completable.timer(1500, MILLISECONDS, Schedulers.io())
-        .subscribe(complete(), error()))
+    setContentView(layout.activity_main)
   }
 
   override fun onDestroy() {
     super.onDestroy()
-    subs.clear()
   }
-
-  fun complete(): () -> Unit = {
-    // logic goes here
-    startActivity(createIntent(MainActivity::class))
-    finish()
-  }
-
-  fun error(): (Throwable) -> Unit = { Timber.e(it) }
 }

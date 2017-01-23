@@ -14,14 +14,7 @@
  *    limitations under the License.
  */
 
-package io.github.muhrifqii.maos.libs
-
-import android.content.Intent
-import com.trello.rxlifecycle2.android.ActivityEvent
-import io.github.muhrifqii.maos.ui.data.MyActivityResult
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.PublishSubject
+package io.github.muhrifqii.maos
 
 /**
  * Created on   : 23/01/17
@@ -30,11 +23,6 @@ import io.reactivex.subjects.PublishSubject
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-open class ActivityViewModel<VIEW : LifecycleClue<ActivityEvent>> {
 
-  val viewChange: PublishSubject<VIEW> = PublishSubject.create()
-  val view: Observable<VIEW> = viewChange.filter { it != null }
-  val disposables: CompositeDisposable = CompositeDisposable()
-  val activityResult: PublishSubject<MyActivityResult> = PublishSubject.create()
-  val intent: PublishSubject<Intent> = PublishSubject.create()
+interface AppComponent {
 }

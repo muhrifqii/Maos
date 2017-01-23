@@ -14,20 +14,46 @@
  *    limitations under the License.
  */
 
-package io.github.muhrifqii.maos.libs
+package io.github.muhrifqii.maos
 
+import android.app.Application
 import android.content.Context
-import android.content.Intent
-import kotlin.reflect.KClass
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.content.res.AssetManager
+import dagger.Module
+import dagger.Provides
+import javax.inject.Singleton
 
 /**
- * Created on   : 21/01/17
+ * Created on   : 23/01/17
  * Author       : muhrifqii
  * Name         : Muhammad Rifqi Fatchurrahman Putra Danar
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
 
-inline fun Context.createIntent(clazz: KClass<*>): Intent {
-  return Intent(this, clazz.java)
+@Module
+class AppModule(val app: MyApplication) {
+
+  @Provides @Singleton
+  fun provideContext(): Context {
+    return app
+  }
+
+  @Provides @Singleton
+  fun provideApplication(): Application {
+    return app
+  }
+
+  @Provides @Singleton
+  fun provideAssetManager(): AssetManager {
+    return app.assets
+  }
+
+  @Provides @Singleton
+  fun providePackageInfo(): PackageInfo {
+    return app.packageManager.getPackageInfo(app.packageName,
+        PackageManager.COMPONENT_ENABLED_STATE_DEFAULT)
+  }
 }

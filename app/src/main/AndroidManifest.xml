@@ -24,7 +24,7 @@
       android:label="@string/app_name"
       android:supportsRtl="true"
       android:theme="@style/AppTheme">
-    <activity android:name="io.github.muhrifqii.maos.ui.SplashActivity"
+    <activity android:name="io.github.muhrifqii.maos.ui.activities.SplashActivity"
         android:theme="@style/Splash">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -32,9 +32,9 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
-    <activity android:name="io.github.muhrifqii.maos.ui.MainActivity">
+    <activity android:name="io.github.muhrifqii.maos.ui.activities.MainActivity">
     </activity>
-    <activity android:name="io.github.muhrifqii.maos.ui.LoginActivity">
+    <activity android:name="io.github.muhrifqii.maos.ui.activities.LoginActivity">
     </activity>
   </application>
 

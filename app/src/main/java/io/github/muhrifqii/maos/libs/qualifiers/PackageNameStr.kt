@@ -14,16 +14,17 @@
  *    limitations under the License.
  */
 
-package io.github.muhrifqii.maos.ui
+package io.github.muhrifqii.maos.libs.qualifiers
 
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
-import io.github.muhrifqii.maos.R.layout
+import javax.inject.Qualifier
 
-class LoginActivity : AppCompatActivity() {
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(layout.activity_login)
-  }
-}
+/**
+ * Created on   : 23/01/17
+ * Author       : muhrifqii
+ * Name         : Muhammad Rifqi Fatchurrahman Putra Danar
+ * Github       : https://github.com/muhrifqii
+ * LinkedIn     : https://linkedin.com/in/muhrifqii
+ */
+@Qualifier
+@Retention
+annotation class PackageNameStr

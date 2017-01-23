@@ -14,11 +14,11 @@
  *    limitations under the License.
  */
 
-package io.github.muhrifqii.maos.ui
+package io.github.muhrifqii.maos.libs.extensions
 
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
-import io.github.muhrifqii.maos.R
+import android.content.Context
+import android.content.Intent
+import kotlin.reflect.KClass
 
 /**
  * Created on   : 21/01/17
@@ -28,14 +28,4 @@ import io.github.muhrifqii.maos.R
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
 
-class MainActivity : AppCompatActivity() {
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-  }
-}
+fun Context.createIntent(clazz: KClass<*>) = Intent(this, clazz.java)
