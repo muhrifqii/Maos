@@ -37,4 +37,6 @@ open class ActivityViewModel<VIEW : LifecycleClue<ActivityEvent>> {
   val disposables: CompositeDisposable = CompositeDisposable()
   val activityResult: PublishSubject<MyActivityResult> = PublishSubject.create()
   val intent: PublishSubject<Intent> = PublishSubject.create()
+
+
 }

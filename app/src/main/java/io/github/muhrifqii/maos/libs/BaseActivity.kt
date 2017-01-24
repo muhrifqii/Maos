@@ -14,21 +14,16 @@
  *    limitations under the License.
  */
 
-package io.github.muhrifqii.maos
+package io.github.muhrifqii.maos.libs
 
-import android.app.Application
-import timber.log.Timber
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 
 /**
- * Created on   : 21/01/17
+ * Created on   : 24/01/17
  * Author       : muhrifqii
  * Name         : Muhammad Rifqi Fatchurrahman Putra Danar
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-class MyApplication : Application() {
-  override fun onCreate() {
-    super.onCreate()
-    if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
-  }
+class BaseActivity : RxAppCompatActivity(){
 }

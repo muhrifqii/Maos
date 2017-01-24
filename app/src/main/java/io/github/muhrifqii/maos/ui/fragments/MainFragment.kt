@@ -14,46 +14,26 @@
  *    limitations under the License.
  */
 
-package io.github.muhrifqii.maos
+package io.github.muhrifqii.maos.ui.fragments
 
-import android.app.Application
-import android.content.Context
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.content.res.AssetManager
-import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
+import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 
 /**
- * Created on   : 23/01/17
+ * Created on   : 24/01/17
  * Author       : muhrifqii
  * Name         : Muhammad Rifqi Fatchurrahman Putra Danar
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
+class MainFragment : Fragment() {
 
-@Module
-class AppModule(val app: MaosApplication) {
 
-  @Provides @Singleton
-  fun provideContext(): Context {
-    return app
-  }
-
-  @Provides @Singleton
-  fun provideApplication(): Application {
-    return app
-  }
-
-  @Provides @Singleton
-  fun provideAssetManager(): AssetManager {
-    return app.assets
-  }
-
-  @Provides @Singleton
-  fun providePackageInfo(): PackageInfo {
-    return app.packageManager.getPackageInfo(app.packageName,
-        PackageManager.COMPONENT_ENABLED_STATE_DEFAULT)
+  override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+      savedInstanceState: Bundle?): View? {
+    return super.onCreateView(inflater, container, savedInstanceState)
   }
 }

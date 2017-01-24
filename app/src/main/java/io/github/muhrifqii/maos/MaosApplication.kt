@@ -17,43 +17,29 @@
 package io.github.muhrifqii.maos
 
 import android.app.Application
-import android.content.Context
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.content.res.AssetManager
-import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
+import com.squareup.leakcanary.LeakCanary
+import com.squareup.leakcanary.RefWatcher
+import timber.log.Timber
 
 /**
- * Created on   : 23/01/17
+ * Created on   : 21/01/17
  * Author       : muhrifqii
  * Name         : Muhammad Rifqi Fatchurrahman Putra Danar
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-
-@Module
-class AppModule(val app: MaosApplication) {
-
-  @Provides @Singleton
-  fun provideContext(): Context {
-    return app
+class MaosApplication : Application() {
+  companion object{
+    
   }
 
-  @Provides @Singleton
-  fun provideApplication(): Application {
-    return app
-  }
+  private lateinit var refwatcher: RefWatcher
 
-  @Provides @Singleton
-  fun provideAssetManager(): AssetManager {
-    return app.assets
-  }
-
-  @Provides @Singleton
-  fun providePackageInfo(): PackageInfo {
-    return app.packageManager.getPackageInfo(app.packageName,
-        PackageManager.COMPONENT_ENABLED_STATE_DEFAULT)
+  override fun onCreate() {
+    super.onCreate()
+    if (BuildConfig.DEBUG) {
+      Timber.plant(Timber.DebugTree())
+      refwatcher = LeakCanary.install(this)
+    }
   }
 }
