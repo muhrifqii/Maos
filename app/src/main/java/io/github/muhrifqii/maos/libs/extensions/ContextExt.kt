@@ -18,6 +18,8 @@ package io.github.muhrifqii.maos.libs.extensions
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import kotlin.reflect.KClass
 
 /**
@@ -28,4 +30,8 @@ import kotlin.reflect.KClass
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
 
-fun Context.createIntent(clazz: KClass<*>) = Intent(this, clazz.java)
+fun Context.intentToClass(clazz: KClass<*>) = Intent(this, clazz.java)
+
+fun Context.intentAppInfo() = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+    .addCategory(Intent.CATEGORY_DEFAULT)
+    .setData(Uri.parse("package:%s".format(this.applicationContext.packageName)))

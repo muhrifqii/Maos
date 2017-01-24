@@ -29,11 +29,9 @@ import timber.log.Timber
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
 class MaosApplication : Application() {
-  companion object{
-    
-  }
 
-  private lateinit var refwatcher: RefWatcher
+  lateinit var refwatcher: RefWatcher
+    private set
 
   override fun onCreate() {
     super.onCreate()

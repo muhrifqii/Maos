@@ -20,7 +20,7 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import io.github.muhrifqii.maos.R.layout
-import io.github.muhrifqii.maos.libs.extensions.createIntent
+import io.github.muhrifqii.maos.libs.extensions.intentToClass
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -54,7 +54,7 @@ class SplashActivity : AppCompatActivity() {
 
   fun complete(): () -> Unit = {
     // logic goes here
-    startActivity(createIntent(MainActivity::class))
+    startActivity(intentToClass(MainActivity::class))
     finish()
   }
 

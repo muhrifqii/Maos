@@ -17,11 +17,14 @@
 package io.github.muhrifqii.maos.libs
 
 import android.content.Intent
+import android.support.annotation.CallSuper
+import com.trello.rxlifecycle2.LifecycleProvider
 import com.trello.rxlifecycle2.android.ActivityEvent
 import io.github.muhrifqii.maos.ui.data.MyActivityResult
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import timber.log.Timber
 
 /**
  * Created on   : 23/01/17
@@ -30,13 +33,29 @@ import io.reactivex.subjects.PublishSubject
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-open class ActivityViewModel<VIEW : LifecycleClue<ActivityEvent>> {
+open class ActivityViewModel<VIEW : LifecycleProvider<ActivityEvent>> {
 
   val viewChange: PublishSubject<VIEW> = PublishSubject.create()
-  val view: Observable<VIEW> = viewChange.filter { it != null }
+  val view: Observable<VIEW> = viewChange.filter { it !is LifecycleEmptyView<*> }
   val disposables: CompositeDisposable = CompositeDisposable()
   val activityResult: PublishSubject<MyActivityResult> = PublishSubject.create()
   val intent: PublishSubject<Intent> = PublishSubject.create()
 
+  @CallSuper protected fun onCreate() {
+    Timber.d("onCreate in %s", this.toString())
+  }
 
+  @CallSuper protected fun onResume(view: VIEW) {
+    Timber.d("onResume in %s", this.toString())
+    viewChange.onNext(view)
+  }
+
+  @CallSuper protected fun onPause() {
+    Timber.d("onPause in %s", this.toString())
+  }
+
+  @CallSuper protected fun onDestroy() {
+    Timber.d("onDestroy in %s", this.toString())
+    viewChange.onComplete()
+  }
 }

@@ -17,6 +17,8 @@
 package io.github.muhrifqii.maos.libs
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.PublishSubject
 
 /**
  * Created on   : 24/01/17
@@ -24,6 +26,14 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
  * Name         : Muhammad Rifqi Fatchurrahman Putra Danar
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
+ *
+ * All ViewModel and lifecycle handling in here
  */
-class BaseActivity : RxAppCompatActivity(){
+abstract class BaseActivity<VIEWMODEL : ActivityViewModel<*>>
+  : RxAppCompatActivity() {
+
+  private val back: PublishSubject<Unit> = PublishSubject.create()
+  private val disposables: CompositeDisposable = CompositeDisposable()
+  protected lateinit var viewModel: VIEWMODEL
+
 }
