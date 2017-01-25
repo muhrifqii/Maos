@@ -14,36 +14,22 @@
  *    limitations under the License.
  */
 
-package io.github.muhrifqii.maos.libs
+package io.github.muhrifqii.maos.libs.extensions
 
-import com.trello.rxlifecycle2.LifecycleProvider
-import com.trello.rxlifecycle2.LifecycleTransformer
-import com.trello.rxlifecycle2.RxLifecycle
-import com.trello.rxlifecycle2.android.RxLifecycleAndroid
-import io.reactivex.Observable
+import android.view.View
 
 /**
- * Created on   : 24/01/17
+ * Created on   : 25/01/17
  * Author       : muhrifqii
  * Name         : Muhammad Rifqi Fatchurrahman Putra Danar
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-class LifecycleEmptyView<E> : LifecycleProvider<E> {
-//  companion object{
-//    fun <X> create(eventType: X): LifecycleEmptyView<X> {
-//      return LifecycleEmptyView()
-//    }
-//  }
-  override fun <T : Any?> bindUntilEvent(event: E): LifecycleTransformer<T> {
-    return RxLifecycle.bindUntilEvent<T, E>(Observable.empty(), event)
-  }
 
-  override fun <T : Any?> bindToLifecycle(): LifecycleTransformer<T> {
-    return RxLifecycleAndroid.bindActivity(Observable.empty())
-  }
+fun View.show() {
+  visibility = View.VISIBLE
+}
 
-  override fun lifecycle(): Observable<E> {
-    return Observable.empty()
-  }
+fun View.hide() {
+  visibility = View.GONE
 }

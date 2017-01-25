@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.dokka-android'
 
 android {
   compileSdkVersion 25
@@ -29,9 +30,9 @@ ext {
   retrofit_version = '2.1.0'
 }
 
-kapt {
-  generateStubs = true
-}
+//kapt {
+//  generateStubs = true
+//}
 
 dependencies {
   compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -51,6 +52,7 @@ dependencies {
   compile 'com.jakewharton.timber:timber:4.5.1'
   compile "com.trello.rxlifecycle2:rxlifecycle:$rxlifecycle_version"
   compile "com.trello.rxlifecycle2:rxlifecycle-components:$rxlifecycle_version"
+  compile "com.trello.rxlifecycle2:rxlifecycle-kotlin:$rxlifecycle_version"
 //  compile "com.trello.rxlifecycle2:rxlifecycle-android:$rxlifecycle_version"
   // dagger thing
   compile 'com.google.dagger:dagger:2.8'

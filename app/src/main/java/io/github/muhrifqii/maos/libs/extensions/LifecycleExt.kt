@@ -16,30 +16,27 @@
 
 package io.github.muhrifqii.maos.libs.extensions
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
-import android.support.annotation.LayoutRes
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import kotlin.reflect.KClass
+import io.github.muhrifqii.maos.libs.ActivityViewModel
+import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.Maybe
+import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.functions.Function
 
 /**
- * Created on   : 21/01/17
+ * Created on   : 24/01/17
  * Author       : muhrifqii
  * Name         : Muhammad Rifqi Fatchurrahman Putra Danar
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
+ *
+ * Beside extension from rxLifecycle, we create more extension for viewmodel
  */
 
-fun Context.intentToClass(clazz: KClass<*>) = Intent(this, clazz.java)
-
-fun Context.intentAppInfo() = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-    .addCategory(Intent.CATEGORY_DEFAULT)
-    .setData(Uri.parse("package:%s".format(this.applicationContext.packageName)))
-
-fun Context.inflateLayout(@LayoutRes layoutResId: Int, parent: ViewGroup, attachToRoot: Boolean): View {
-  return LayoutInflater.from(this).inflate(layoutResId, parent, attachToRoot)
+/**
+ * This transformer is for viewmodel
+ */
+fun <T, E> Observable<T>.bindToLifecycle(provider:ActivityViewModel<*>) : Observable<T>{
+  this.compose<T>(provider.)
 }

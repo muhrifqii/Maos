@@ -33,29 +33,48 @@ import timber.log.Timber
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-open class ActivityViewModel<VIEW : LifecycleProvider<ActivityEvent>> {
+open class ActivityViewModel<TheView : LifecycleType<ActivityEvent>> {
 
-  val viewChange: PublishSubject<VIEW> = PublishSubject.create()
-  val view: Observable<VIEW> = viewChange.filter { it !is LifecycleEmptyView<*> }
+  val viewChange: PublishSubject<LifecycleType<ActivityEvent>> = PublishSubject.create()
+  val view: Observable<TheView> = viewChange.filter { it !is LifecycleEmptyType<*> }.map { it as TheView }
   val disposables: CompositeDisposable = CompositeDisposable()
   val activityResult: PublishSubject<MyActivityResult> = PublishSubject.create()
   val intent: PublishSubject<Intent> = PublishSubject.create()
 
   @CallSuper protected fun onCreate() {
-    Timber.d("onCreate in %s", this.toString())
+    Timber.d("onCreate %s", this.toString())
+    viewChange.onNext(LifecycleEmptyType<ActivityEvent>())
   }
 
-  @CallSuper protected fun onResume(view: VIEW) {
-    Timber.d("onResume in %s", this.toString())
+  @CallSuper protected fun onResume(view: TheView) {
+    Timber.d("onResume %s in %s", this.toString(), view.toString())
     viewChange.onNext(view)
   }
 
   @CallSuper protected fun onPause() {
-    Timber.d("onPause in %s", this.toString())
+    Timber.d("onPause %s", this.toString())
   }
 
   @CallSuper protected fun onDestroy() {
-    Timber.d("onDestroy in %s", this.toString())
+    Timber.d("onDestroy %s", this.toString())
+    disposables.clear()
     viewChange.onComplete()
+  }
+
+  /**
+   * By composing this transformer with an observable you guarantee that every observable in your view model
+   * will be properly completed when the view model completes.
+   *
+   * All observables in a view model must do `.compose(bindToLifecycle())` before calling
+   * `subscribe`.
+   */
+  fun <T> bindToLifecycle(): ViewModelLifecycleTransformer<T, TheView> {
+    val x = ViewModelLifecycleTransformer<T, TheView>(view)
+//    return {
+//      it.takeUntil(
+//          view.switchMap { v -> v.lifecycle().map { e -> Pair.create(v, e) } }
+//              .filter { ve -> isFinished(ve.first, ve.second) }
+//      )
+//    }
   }
 }

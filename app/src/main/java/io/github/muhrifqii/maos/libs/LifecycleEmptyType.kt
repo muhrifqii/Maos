@@ -14,32 +14,23 @@
  *    limitations under the License.
  */
 
-package io.github.muhrifqii.maos.libs.extensions
+package io.github.muhrifqii.maos.libs
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
-import android.support.annotation.LayoutRes
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import kotlin.reflect.KClass
+import com.trello.rxlifecycle2.LifecycleProvider
+import com.trello.rxlifecycle2.LifecycleTransformer
+import com.trello.rxlifecycle2.RxLifecycle
+import com.trello.rxlifecycle2.android.RxLifecycleAndroid
+import io.reactivex.Observable
 
 /**
- * Created on   : 21/01/17
+ * Created on   : 24/01/17
  * Author       : muhrifqii
  * Name         : Muhammad Rifqi Fatchurrahman Putra Danar
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-
-fun Context.intentToClass(clazz: KClass<*>) = Intent(this, clazz.java)
-
-fun Context.intentAppInfo() = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-    .addCategory(Intent.CATEGORY_DEFAULT)
-    .setData(Uri.parse("package:%s".format(this.applicationContext.packageName)))
-
-fun Context.inflateLayout(@LayoutRes layoutResId: Int, parent: ViewGroup, attachToRoot: Boolean): View {
-  return LayoutInflater.from(this).inflate(layoutResId, parent, attachToRoot)
+class LifecycleEmptyType<E> : LifecycleType<E> {
+  override fun lifecycle(): Observable<E> {
+    return Observable.empty()
+  }
 }
