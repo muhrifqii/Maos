@@ -16,6 +16,9 @@
 
 package io.github.muhrifqii.maos.libs
 
+import com.trello.rxlifecycle2.android.ActivityEvent
+import com.trello.rxlifecycle2.android.FragmentEvent
+import io.reactivex.BackpressureStrategy.LATEST
 import io.reactivex.Completable
 import io.reactivex.CompletableSource
 import io.reactivex.CompletableTransformer
@@ -31,6 +34,8 @@ import io.reactivex.Single
 import io.reactivex.SingleSource
 import io.reactivex.SingleTransformer
 import org.reactivestreams.Publisher
+import timber.log.Timber
+import java.util.concurrent.CancellationException
 
 /**
  * Created on   : 25/01/17
@@ -39,25 +44,54 @@ import org.reactivestreams.Publisher
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  *
- * Custom stream transformation to support viewmodel
+ * Custom lifecycleStream transformation to support viewmodel
+ * @param lifecycleStream is Observable
  */
-class ViewModelLifecycleTransformer<Event, TheView>(private val stream: Observable<TheView>) :
-    ObservableTransformer<Event, Event>, FlowableTransformer<Event, Event>,
-    MaybeTransformer<Event, Event>, SingleTransformer<Event, Event>, CompletableTransformer {
+class ViewModelLifecycleTransformer<Stream>(
+    private val lifecycleStream: Observable<out LifecycleType<out Any>>) :
+    ObservableTransformer<Stream, Stream>, FlowableTransformer<Stream, Stream>,
+    MaybeTransformer<Stream, Stream>, SingleTransformer<Stream, Stream>, CompletableTransformer {
 
-  override fun apply(upstream: Observable<Event>): ObservableSource<Event> {
-    upstream.takeUntil(stream.switchMap{it})
+  override fun apply(upstream: Observable<Stream>): ObservableSource<Stream> {
+    return upstream.takeUntil(lifecycle())
   }
 
-  override fun apply(upstream: Flowable<Event>): Publisher<Event> {
+  override fun apply(upstream: Flowable<Stream>): Publisher<Stream> {
+    return upstream.takeUntil(lifecycle().toFlowable(LATEST))
   }
 
-  override fun apply(upstream: Maybe<Event>): MaybeSource<Event> {
+  override fun apply(upstream: Maybe<Stream>): MaybeSource<Stream> {
+    return upstream.takeUntil(lifecycle().firstElement())
   }
 
-  override fun apply(upstream: Single<Event>): SingleSource<Event> {
+  override fun apply(upstream: Single<Stream>): SingleSource<Stream> {
+    return upstream.takeUntil(lifecycle().firstOrError())
   }
 
   override fun apply(upstream: Completable): CompletableSource {
+    return Completable.ambArray(upstream,
+        lifecycle().flatMapCompletable { Completable.error(CancellationException()) })
+    // remember that flatmap returns all stream from flatten function
+  }
+
+  override fun hashCode(): Int {
+    return lifecycleStream.hashCode()
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other === null || other.javaClass != javaClass) return false
+    return lifecycleStream == (other as ViewModelLifecycleTransformer<*>).lifecycleStream
+  }
+
+  private fun lifecycle() = lifecycleStream.switchMap { it.lifecycle() }.filter {
+    when (it) {
+      is ActivityEvent -> it === ActivityEvent.DESTROY
+      is FragmentEvent -> it === FragmentEvent.DETACH
+      else -> {
+        Timber.e("error")
+        false
+      }
+    }
   }
 }

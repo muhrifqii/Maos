@@ -63,8 +63,8 @@
 # NOTE: You should also include the Android Proguard config found with the build tools:
 # $ANDROID_HOME/tools/proguard/proguard-android.txt
 # Keep public classes and methods.
--dontwarn com.bea.xml.stream.**
--dontwarn org.simpleframework.xml.stream.**
+-dontwarn com.bea.xml.lifecycleStream.**
+-dontwarn org.simpleframework.xml.lifecycleStream.**
 -keep class org.simpleframework.xml.**{ *; }
 -keepclassmembers,allowobfuscation class * {
     @org.simpleframework.xml.* <fields>;

@@ -29,8 +29,8 @@ import io.reactivex.Observable
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-class LifecycleEmptyType<E> : LifecycleType<E> {
-  override fun lifecycle(): Observable<E> {
+class EmptyLifecycleType<Event> : LifecycleType<Event> {
+  override fun lifecycle(): Observable<Event> {
     return Observable.empty()
   }
 }

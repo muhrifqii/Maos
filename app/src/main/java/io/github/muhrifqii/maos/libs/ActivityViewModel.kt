@@ -36,14 +36,14 @@ import timber.log.Timber
 open class ActivityViewModel<TheView : LifecycleType<ActivityEvent>> {
 
   val viewChange: PublishSubject<LifecycleType<ActivityEvent>> = PublishSubject.create()
-  val view: Observable<TheView> = viewChange.filter { it !is LifecycleEmptyType<*> }.map { it as TheView }
+  val view: Observable<out LifecycleType<ActivityEvent>> = viewChange.filter { it !is EmptyLifecycleType<*> }
   val disposables: CompositeDisposable = CompositeDisposable()
   val activityResult: PublishSubject<MyActivityResult> = PublishSubject.create()
   val intent: PublishSubject<Intent> = PublishSubject.create()
 
   @CallSuper protected fun onCreate() {
     Timber.d("onCreate %s", this.toString())
-    viewChange.onNext(LifecycleEmptyType<ActivityEvent>())
+    viewChange.onNext(EmptyLifecycleType<ActivityEvent>())
   }
 
   @CallSuper protected fun onResume(view: TheView) {
@@ -68,8 +68,8 @@ open class ActivityViewModel<TheView : LifecycleType<ActivityEvent>> {
    * All observables in a view model must do `.compose(bindToLifecycle())` before calling
    * `subscribe`.
    */
-  fun <T> bindToLifecycle(): ViewModelLifecycleTransformer<T, TheView> {
-    val x = ViewModelLifecycleTransformer<T, TheView>(view)
+  fun <T> bindToLifecycle(): ViewModelLifecycleTransformer<T> {
+    val x = ViewModelLifecycleTransformer<T>(view)
 //    return {
 //      it.takeUntil(
 //          view.switchMap { v -> v.lifecycle().map { e -> Pair.create(v, e) } }

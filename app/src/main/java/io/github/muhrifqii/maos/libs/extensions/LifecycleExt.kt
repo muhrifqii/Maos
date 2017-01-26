@@ -40,3 +40,4 @@ import io.reactivex.functions.Function
 fun <T, E> Observable<T>.bindToLifecycle(provider:ActivityViewModel<*>) : Observable<T>{
   this.compose<T>(provider.)
 }
+
