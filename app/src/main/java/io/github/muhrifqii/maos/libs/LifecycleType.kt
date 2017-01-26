@@ -16,6 +16,8 @@
 
 package io.github.muhrifqii.maos.libs
 
+import com.trello.rxlifecycle2.android.ActivityEvent
+import com.trello.rxlifecycle2.android.FragmentEvent
 import io.reactivex.Observable
 
 /**
@@ -25,9 +27,13 @@ import io.reactivex.Observable
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-interface LifecycleType<LifecycleEvent> {
+
+interface LifecycleType<E> {
   /**
-   * it describes the lifecycle of certain view/activity/fragment
+   * it describes the lifecycle of certain activity/fragment
    */
-  fun lifecycle(): Observable<LifecycleEvent>
+  fun lifecycle(): Observable<E>
 }
+
+interface LifecycleTypeActivity : LifecycleType<ActivityEvent>
+interface LifecycleTypeFragment : LifecycleType<FragmentEvent>

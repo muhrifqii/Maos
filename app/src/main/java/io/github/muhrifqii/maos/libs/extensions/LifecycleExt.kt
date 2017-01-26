@@ -16,7 +16,10 @@
 
 package io.github.muhrifqii.maos.libs.extensions
 
+import com.trello.rxlifecycle2.android.ActivityEvent
 import io.github.muhrifqii.maos.libs.ActivityViewModel
+import io.github.muhrifqii.maos.libs.LifecycleType
+import io.github.muhrifqii.maos.libs.LifecycleTypeActivity
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
@@ -34,10 +37,18 @@ import io.reactivex.functions.Function
  * Beside extension from rxLifecycle, we create more extension for viewmodel
  */
 
-/**
- * This transformer is for viewmodel
- */
-fun <T, E> Observable<T>.bindToLifecycle(provider:ActivityViewModel<*>) : Observable<T>{
-  this.compose<T>(provider.)
-}
+// This transformer is for ActivityViewModel
+fun <T> Observable<T>.bindToLifecycle(provider: ActivityViewModel<LifecycleTypeActivity>) =
+    this.compose<T>(provider.bindToLifecycle())
 
+fun <T> Flowable<T>.bindToLifecycle(provider: ActivityViewModel<LifecycleTypeActivity>) =
+    this.compose<T>(provider.bindToLifecycle())
+
+fun <T> Single<T>.bindToLifecycle(provider: ActivityViewModel<LifecycleTypeActivity>) =
+    this.compose<T>(provider.bindToLifecycle())
+
+fun <T> Maybe<T>.bindToLifecycle(provider: ActivityViewModel<LifecycleTypeActivity>) =
+    this.compose<T>(provider.bindToLifecycle())
+
+fun Completable.bindToLifecycle(provider: ActivityViewModel<LifecycleTypeActivity>) =
+    this.compose(provider.bindToLifecycle<Completable>())

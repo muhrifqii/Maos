@@ -33,17 +33,26 @@ import timber.log.Timber
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-open class ActivityViewModel<TheView : LifecycleType<ActivityEvent>> {
+open class ActivityViewModel<in TheView : LifecycleTypeActivity> {
 
-  val viewChange: PublishSubject<LifecycleType<ActivityEvent>> = PublishSubject.create()
+  val viewChange: PublishSubject<LifecycleTypeActivity> = PublishSubject.create()
   val view: Observable<out LifecycleType<ActivityEvent>> = viewChange.filter { it !is EmptyLifecycleType<*> }
   val disposables: CompositeDisposable = CompositeDisposable()
   val activityResult: PublishSubject<MyActivityResult> = PublishSubject.create()
   val intent: PublishSubject<Intent> = PublishSubject.create()
 
+  fun setActivityResult(activityResult: MyActivityResult) =
+      this.activityResult.onNext(activityResult)
+
+  fun setIntent(intent: Intent) = this.intent.onNext(intent)
+
+  protected fun getActivityResult() = activityResult.hide()
+  protected fun getIntent() = intent.hide()
+
   @CallSuper protected fun onCreate() {
     Timber.d("onCreate %s", this.toString())
-    viewChange.onNext(EmptyLifecycleType<ActivityEvent>())
+    val x = EmptyLifecycleType<ActivityEvent>() as LifecycleTypeActivity
+    viewChange.onNext(x)
   }
 
   @CallSuper protected fun onResume(view: TheView) {
@@ -53,6 +62,8 @@ open class ActivityViewModel<TheView : LifecycleType<ActivityEvent>> {
 
   @CallSuper protected fun onPause() {
     Timber.d("onPause %s", this.toString())
+    val x = EmptyLifecycleType<ActivityEvent>() as LifecycleTypeActivity
+    viewChange.onNext(x)
   }
 
   @CallSuper protected fun onDestroy() {
@@ -62,19 +73,8 @@ open class ActivityViewModel<TheView : LifecycleType<ActivityEvent>> {
   }
 
   /**
-   * By composing this transformer with an observable you guarantee that every observable in your view model
-   * will be properly completed when the view model completes.
-   *
-   * All observables in a view model must do `.compose(bindToLifecycle())` before calling
+   * All observables in a view model must compose `bindToLifecycle()` before calling
    * `subscribe`.
    */
-  fun <T> bindToLifecycle(): ViewModelLifecycleTransformer<T> {
-    val x = ViewModelLifecycleTransformer<T>(view)
-//    return {
-//      it.takeUntil(
-//          view.switchMap { v -> v.lifecycle().map { e -> Pair.create(v, e) } }
-//              .filter { ve -> isFinished(ve.first, ve.second) }
-//      )
-//    }
-  }
+  fun <T> bindToLifecycle() = ViewModelLifecycleTransformer<T>(view)
 }
