@@ -35,7 +35,7 @@ import timber.log.Timber
  *
  * All ViewModel and lifecycle handling in here
  */
-abstract class BaseActivity<TheViewModel : ActivityViewModel<*>>
+abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeActivity>>
   : RxAppCompatActivity(), LifecycleTypeActivity {
 
   private val back: PublishSubject<Unit> = PublishSubject.create()
@@ -54,7 +54,7 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<*>>
   override fun onStart() {
     super.onStart()
     Timber.d("OnStart on %s", this.toString())
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       viewModel?.onDropView()
     }
   }
@@ -62,15 +62,15 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<*>>
   override fun onResume() {
     super.onResume()
     Timber.d("OnResume on %s", this.toString())
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N){
-      viewModel?.onDropView()
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+      viewModel?.onTakeView(this)
     }
   }
 
   override fun onPause() {
     super.onPause()
     Timber.d("OnPause on %s", this.toString())
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N){
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
       viewModel?.onDropView()
     }
   }
@@ -78,7 +78,7 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<*>>
   override fun onStop() {
     super.onStop()
     Timber.d("OnStop on %s", this.toString())
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       viewModel?.onDropView()
     }
   }
@@ -91,17 +91,5 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<*>>
   @CallSuper override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     viewModel?.setActivityResult(MaosActivityResult(requestCode, resultCode, data))
-  }
-
-  private fun assignViewModel(viewModelBundle: Bundle?) {
-    if (viewModel == null) {
-      val annotation = javaClass.annotations.find { it is  } .getAnnotation(RequiresActivityViewModel::class.java)
-      val viewModelClass = if (annotation == null) null else annotation!!.value()
-      if (viewModelClass != null) {
-        viewModel = ActivityViewModelManager.getInstance().fetch(this,
-            viewModelClass,
-            BundleUtils.maybeGetBundle(viewModelEnvelope, VIEW_MODEL_KEY))
-      }
-    }
   }
 }

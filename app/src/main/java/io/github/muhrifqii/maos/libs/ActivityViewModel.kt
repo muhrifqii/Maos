@@ -17,6 +17,7 @@
 package io.github.muhrifqii.maos.libs
 
 import android.content.Intent
+import android.os.Bundle
 import android.support.annotation.CallSuper
 import com.trello.rxlifecycle2.LifecycleProvider
 import com.trello.rxlifecycle2.android.ActivityEvent
@@ -33,10 +34,11 @@ import timber.log.Timber
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-open class ActivityViewModel<in TheView : LifecycleTypeActivity> {
+open class ActivityViewModel<TheView> where TheView : LifecycleTypeActivity {
 
   private val viewChange: PublishSubject<LifecycleTypeActivity> = PublishSubject.create()
-  private val view: Observable<out LifecycleType<ActivityEvent>> = viewChange.filter { it !is EmptyLifecycleType<*> }
+  private val view: Observable<TheView> =
+      viewChange.filter { it !is EmptyLifecycleType<*> }.map { it as TheView }
   private val disposables: CompositeDisposable = CompositeDisposable()
   private val activityResult: PublishSubject<MaosActivityResult> = PublishSubject.create()
   private val intent: PublishSubject<Intent> = PublishSubject.create()
@@ -52,7 +54,7 @@ open class ActivityViewModel<in TheView : LifecycleTypeActivity> {
   /**
    * lifecycle start, but viewmodel should not be started yet
    */
-  @CallSuper open fun onCreate() {
+  @CallSuper open fun onCreate(savedInstanceState: Bundle) {
     Timber.d("onCreate %s", this.toString())
     val x = EmptyLifecycleType<ActivityEvent>() as LifecycleTypeActivity
     viewChange.onNext(x)
@@ -61,7 +63,7 @@ open class ActivityViewModel<in TheView : LifecycleTypeActivity> {
   /**
    * begin to change the view
    */
-  @CallSuper open fun onTakeView(view: TheView) {
+  @CallSuper open fun <TheView : LifecycleTypeActivity> onTakeView(view: TheView) {
     Timber.d("onTakeView %s in %s", this.toString(), view.toString())
     viewChange.onNext(view)
   }
@@ -87,3 +89,5 @@ open class ActivityViewModel<in TheView : LifecycleTypeActivity> {
    */
   fun <T> bindToLifecycle() = ViewModelLifecycleTransformer<T>(view)
 }
+
+
