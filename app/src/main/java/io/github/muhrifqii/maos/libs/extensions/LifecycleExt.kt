@@ -37,7 +37,7 @@ import io.reactivex.functions.Function
  * Beside extension from rxLifecycle, we create more extension for viewmodel
  */
 
-// This transformer is for ActivityViewModel
+// These transformer are for ActivityViewModel
 fun <T> Observable<T>.bindToLifecycle(provider: ActivityViewModel<LifecycleTypeActivity>) =
     this.compose<T>(provider.bindToLifecycle())
 
@@ -52,3 +52,5 @@ fun <T> Maybe<T>.bindToLifecycle(provider: ActivityViewModel<LifecycleTypeActivi
 
 fun Completable.bindToLifecycle(provider: ActivityViewModel<LifecycleTypeActivity>) =
     this.compose(provider.bindToLifecycle<Completable>())
+
+// These transformer are for FragmentViewModel

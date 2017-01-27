@@ -45,6 +45,7 @@ import java.util.concurrent.CancellationException
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  *
  * Custom lifecycleStream transformation to support viewmodel
+ * @param <Stream> is the upstream
  * @param lifecycleStream is Observable
  */
 class ViewModelLifecycleTransformer<Stream>(

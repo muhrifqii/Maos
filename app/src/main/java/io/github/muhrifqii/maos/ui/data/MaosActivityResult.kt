@@ -25,8 +25,10 @@ import android.content.Intent
  * Name         : Muhammad Rifqi Fatchurrahman Putra Danar
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
+ *
+ * Model the activity result
  */
-data class MyActivityResult(var requestCode: Int, var resultCode: Int, var intent: Intent) {
+data class MaosActivityResult(var requestCode: Int, var resultCode: Int, var intent: Intent?) {
   fun isCancelled(): Boolean = resultCode == Activity.RESULT_CANCELED
   fun isOk(): Boolean = resultCode == Activity.RESULT_OK
   fun isRequestCode(code: Int): Boolean = code == requestCode

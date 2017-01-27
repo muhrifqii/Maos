@@ -20,7 +20,7 @@ import android.content.Intent
 import android.support.annotation.CallSuper
 import com.trello.rxlifecycle2.LifecycleProvider
 import com.trello.rxlifecycle2.android.ActivityEvent
-import io.github.muhrifqii.maos.ui.data.MyActivityResult
+import io.github.muhrifqii.maos.ui.data.MaosActivityResult
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
@@ -35,13 +35,13 @@ import timber.log.Timber
  */
 open class ActivityViewModel<in TheView : LifecycleTypeActivity> {
 
-  val viewChange: PublishSubject<LifecycleTypeActivity> = PublishSubject.create()
-  val view: Observable<out LifecycleType<ActivityEvent>> = viewChange.filter { it !is EmptyLifecycleType<*> }
-  val disposables: CompositeDisposable = CompositeDisposable()
-  val activityResult: PublishSubject<MyActivityResult> = PublishSubject.create()
-  val intent: PublishSubject<Intent> = PublishSubject.create()
+  private val viewChange: PublishSubject<LifecycleTypeActivity> = PublishSubject.create()
+  private val view: Observable<out LifecycleType<ActivityEvent>> = viewChange.filter { it !is EmptyLifecycleType<*> }
+  private val disposables: CompositeDisposable = CompositeDisposable()
+  private val activityResult: PublishSubject<MaosActivityResult> = PublishSubject.create()
+  private val intent: PublishSubject<Intent> = PublishSubject.create()
 
-  fun setActivityResult(activityResult: MyActivityResult) =
+  fun setActivityResult(activityResult: MaosActivityResult) =
       this.activityResult.onNext(activityResult)
 
   fun setIntent(intent: Intent) = this.intent.onNext(intent)
@@ -49,24 +49,33 @@ open class ActivityViewModel<in TheView : LifecycleTypeActivity> {
   protected fun getActivityResult() = activityResult.hide()
   protected fun getIntent() = intent.hide()
 
-  @CallSuper protected fun onCreate() {
+  /**
+   * lifecycle start, but viewmodel should not be started yet
+   */
+  @CallSuper open fun onCreate() {
     Timber.d("onCreate %s", this.toString())
     val x = EmptyLifecycleType<ActivityEvent>() as LifecycleTypeActivity
     viewChange.onNext(x)
   }
 
-  @CallSuper protected fun onResume(view: TheView) {
-    Timber.d("onResume %s in %s", this.toString(), view.toString())
+  /**
+   * begin to change the view
+   */
+  @CallSuper open fun onTakeView(view: TheView) {
+    Timber.d("onTakeView %s in %s", this.toString(), view.toString())
     viewChange.onNext(view)
   }
 
-  @CallSuper protected fun onPause() {
-    Timber.d("onPause %s", this.toString())
+  /**
+   * stop the view with an empty type of view
+   */
+  @CallSuper open fun onDropView() {
+    Timber.d("onDropView %s", this.toString())
     val x = EmptyLifecycleType<ActivityEvent>() as LifecycleTypeActivity
     viewChange.onNext(x)
   }
 
-  @CallSuper protected fun onDestroy() {
+  @CallSuper open fun onDestroy() {
     Timber.d("onDestroy %s", this.toString())
     disposables.clear()
     viewChange.onComplete()
