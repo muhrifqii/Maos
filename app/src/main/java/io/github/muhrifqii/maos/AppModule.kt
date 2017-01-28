@@ -18,11 +18,15 @@ package io.github.muhrifqii.maos
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.AssetManager
+import android.content.res.Resources
+import android.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
+import io.github.muhrifqii.maos.libs.qualifiers.ApplicationContext
 import javax.inject.Singleton
 
 /**
@@ -36,24 +40,23 @@ import javax.inject.Singleton
 @Module
 class AppModule(val app: MaosApplication) {
 
-  @Provides @Singleton
-  fun provideContext(): Context {
-    return app
-  }
+  @Provides @Singleton @ApplicationContext
+  fun provideContext(): Context = app
 
   @Provides @Singleton
-  fun provideApplication(): Application {
-    return app
-  }
+  fun provideApplication(): Application = app
 
   @Provides @Singleton
-  fun provideAssetManager(): AssetManager {
-    return app.assets
-  }
+  fun provideAssetManager(): AssetManager = app.assets
 
   @Provides @Singleton
-  fun providePackageInfo(): PackageInfo {
-    return app.packageManager.getPackageInfo(app.packageName,
-        PackageManager.COMPONENT_ENABLED_STATE_DEFAULT)
-  }
+  fun providePackageInfo(): PackageInfo = app.packageManager
+      .getPackageInfo(app.packageName, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT)
+
+  @Provides @Singleton
+  fun provideResources(): Resources = app.resources
+
+  @Provides @Singleton
+  fun provideSharedPreferences(): SharedPreferences =
+      PreferenceManager.getDefaultSharedPreferences(app)
 }

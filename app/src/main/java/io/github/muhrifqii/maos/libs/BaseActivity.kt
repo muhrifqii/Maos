@@ -20,6 +20,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.CallSuper
+import android.widget.CheckBox
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import io.github.muhrifqii.maos.ui.data.MaosActivityResult
 import io.reactivex.disposables.CompositeDisposable

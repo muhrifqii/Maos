@@ -16,6 +16,13 @@
 
 package io.github.muhrifqii.maos.libs
 
+import android.content.Context
+import android.os.Bundle
+import io.github.muhrifqii.maos.libs.qualifiers.ApplicationContext
+import java.lang.reflect.InvocationTargetException
+import java.util.HashMap
+import java.util.UUID
+
 /**
  * Created on   : 27/01/17
  * Author       : muhrifqii
@@ -23,6 +30,38 @@ package io.github.muhrifqii.maos.libs
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-class ViewModelManager {
+object ViewModelManager {
+
+  private val KEY_VIEW_MODEL_ID: String = "key-id-view-model"
+  private var activityViewModels =
+      HashMap<String, ActivityViewModel<out LifecycleTypeActivity>>()
+//  private var fragmentViewModels =
+//      HashMap<String, FragmentViewModel<out LifecycleTypeFragment>>()
+
+  fun <T : ActivityViewModel<out LifecycleTypeActivity>> findActivity(context: Context,
+      viewModelClass: Class<T>, savedInstanceState: Bundle?): T {
+
+    val id = findId(savedInstanceState)
+    val activityViewModel: ActivityViewModel<out LifecycleTypeActivity> =
+        activityViewModels[id] ?: createActivityViewModel(context, savedInstanceState, id)
+
+    return activityViewModel as T
+  }
+
+//  fun <T : FragmentViewModel<out LifecycleTypeFragment>> findFragment(context: Context,
+//      viewModelClass: Class<T>,
+//      savedInstanceState: Bundle?): T {
+//
+//    val id = findId(savedInstanceState)
+//  }
+
+  private fun findId(state: Bundle?): String {
+    return if (state !== null) state.getString(KEY_VIEW_MODEL_ID)
+    else UUID.randomUUID().toString()
+  }
+
+  private fun createActivityViewModel(@ApplicationContext context: Context, state: Bundle?,
+      id: String)
+      : ActivityViewModel<out LifecycleTypeActivity> {
 
 }
