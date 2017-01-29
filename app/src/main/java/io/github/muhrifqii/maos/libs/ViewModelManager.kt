@@ -22,6 +22,7 @@ import io.github.muhrifqii.maos.libs.qualifiers.ApplicationContext
 import java.lang.reflect.InvocationTargetException
 import java.util.HashMap
 import java.util.UUID
+import kotlin.reflect.KClass
 
 /**
  * Created on   : 27/01/17
@@ -40,7 +41,6 @@ object ViewModelManager {
 
   fun <T : ActivityViewModel<out LifecycleTypeActivity>> findActivity(context: Context,
       viewModelClass: Class<T>, savedInstanceState: Bundle?): T {
-
     val id = findId(savedInstanceState)
     val activityViewModel: ActivityViewModel<out LifecycleTypeActivity> =
         activityViewModels[id] ?: createActivityViewModel(context, savedInstanceState, id)

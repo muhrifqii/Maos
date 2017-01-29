@@ -18,6 +18,9 @@ package io.github.muhrifqii.maos.ui.data
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Parcel
+import android.os.Parcelable
+import io.github.muhrifqii.maos.libs.extensions.createParcel
 
 /**
  * Created on   : 23/01/17
@@ -28,7 +31,28 @@ import android.content.Intent
  *
  * Model the activity result
  */
-data class MaosActivityResult(var requestCode: Int, var resultCode: Int, var intent: Intent?) {
+data class MaosActivityResult(var requestCode: Int, var resultCode: Int, var intent: Intent?)
+  : Parcelable {
+  companion object {
+    val CREATOR = createParcel(::MaosActivityResult)
+  }
+
+  override fun writeToParcel(p0: Parcel?, p1: Int) {
+    p0?.apply {
+      writeInt(requestCode)
+      writeInt(resultCode)
+      writeValue(intent)
+//      writeParcelable(intent, Parcelable.PARCELABLE_WRITE_RETURN_VALUE)
+    }
+  }
+
+  override fun describeContents(): Int = 0
+
+  constructor(parcel: Parcel) : this(
+      parcel.readInt(), parcel.readInt(),
+      parcel.readValue(Intent::class.java.classLoader) as Intent?
+  )
+
   fun isCancelled(): Boolean = resultCode == Activity.RESULT_CANCELED
   fun isOk(): Boolean = resultCode == Activity.RESULT_OK
   fun isRequestCode(code: Int): Boolean = code == requestCode

@@ -14,31 +14,23 @@
  *    limitations under the License.
  */
 
-package io.github.muhrifqii.maos.libs
+package io.github.muhrifqii.maos.libs.extensions
 
 import android.os.Parcel
 import android.os.Parcelable
-import io.github.muhrifqii.maos.libs.extensions.createParcel
+import android.os.Parcelable.Creator
 
 /**
- * Created on   : 28/01/17
+ * Created on   : 29/01/17
  * Author       : muhrifqii
  * Name         : Muhammad Rifqi Fatchurrahman Putra Danar
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
- *
- * Wrapper for view model parameter in a parcelable BOILERPLATE!
  */
-data class ViewModelParams(var x: Int) : Parcelable {
-  companion object {
-    @JvmField val CREATOR: Parcelable.Creator<ViewModelParams> = createParcel(::ViewModelParams)
-  }
 
-  constructor(source: Parcel) : this(source.readInt())
+inline fun <reified T : Parcelable> createParcel(crossinline createFromParcel: (Parcel) -> T?)
+    : Parcelable.Creator<T> = object : Creator<T> {
+  override fun createFromParcel(p0: Parcel?): T = createFromParcel(p0)
 
-  override fun writeToParcel(destination: Parcel?, flag: Int) {
-    destination?.writeInt(x)
-  }
-
-  override fun describeContents(): Int = 0
+  override fun newArray(p0: Int): Array<out T?> = kotlin.arrayOfNulls(p0)
 }
