@@ -16,7 +16,10 @@
 
 package io.github.muhrifqii.maos.libs.extensions
 
+import android.support.annotation.LayoutRes
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 
 /**
  * Created on   : 25/01/17
@@ -33,3 +36,6 @@ fun View.show() {
 fun View.hide() {
   visibility = View.GONE
 }
+
+fun ViewGroup.inlfate(@LayoutRes layoutResId: Int, attachToRoot: Boolean = false) =
+    LayoutInflater.from(this.context).inflate(layoutResId, this, attachToRoot)

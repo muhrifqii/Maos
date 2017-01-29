@@ -40,6 +40,3 @@ fun Context.intentAppInfo() = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTING
     .addCategory(Intent.CATEGORY_DEFAULT)
     .setData(Uri.parse("package:%s".format(this.applicationContext.packageName)))
 
-fun Context.inflateLayout(@LayoutRes layoutResId: Int, parent: ViewGroup, attachToRoot: Boolean): View {
-  return LayoutInflater.from(this).inflate(layoutResId, parent, attachToRoot)
-}
