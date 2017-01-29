@@ -16,6 +16,10 @@
 
 package io.github.muhrifqii.maos
 
+import dagger.Component
+import io.github.muhrifqii.maos.libs.ViewModelParams
+import javax.inject.Singleton
+
 /**
  * Created on   : 23/01/17
  * Author       : muhrifqii
@@ -24,5 +28,8 @@ package io.github.muhrifqii.maos
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
 
+@Singleton
+@Component(modules = arrayOf(AppModule::class))
 interface AppComponent {
+  fun viewModelParams(): ViewModelParams
 }

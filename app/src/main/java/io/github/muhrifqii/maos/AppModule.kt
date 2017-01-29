@@ -26,6 +26,7 @@ import android.content.res.Resources
 import android.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
+import io.github.muhrifqii.maos.libs.ViewModelParams
 import io.github.muhrifqii.maos.libs.qualifiers.ApplicationContext
 import javax.inject.Singleton
 
@@ -59,4 +60,11 @@ class AppModule(val app: MaosApplication) {
   @Provides @Singleton
   fun provideSharedPreferences(): SharedPreferences =
       PreferenceManager.getDefaultSharedPreferences(app)
+
+  @Provides @Singleton
+  fun provideViewModelParams(sharedPreferences: SharedPreferences): ViewModelParams =
+      ViewModelParams(
+          x = 0,
+          sharedPreferences = sharedPreferences
+      )
 }

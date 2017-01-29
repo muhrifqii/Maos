@@ -32,6 +32,8 @@ class MaosApplication : Application() {
 
   lateinit var refwatcher: RefWatcher
     private set
+  lateinit var component: AppComponent
+    private set
 
   override fun onCreate() {
     super.onCreate()
@@ -39,5 +41,6 @@ class MaosApplication : Application() {
       Timber.plant(Timber.DebugTree())
       refwatcher = LeakCanary.install(this)
     }
+    component = DaggerAppComponent.builder().appModule(AppModule(this)).build()
   }
 }

@@ -54,7 +54,7 @@ open class ActivityViewModel<TheView> where TheView : LifecycleTypeActivity {
   /**
    * lifecycle start, but viewmodel should not be started yet
    */
-  @CallSuper open fun onCreate(savedInstanceState: Bundle) {
+  @CallSuper open fun onCreate(savedInstanceState: Bundle?) {
     Timber.d("onCreate %s", this.toString())
     val x = EmptyLifecycleType<ActivityEvent>() as LifecycleTypeActivity
     viewChange.onNext(x)

@@ -18,6 +18,7 @@ package io.github.muhrifqii.maos.libs
 
 import android.content.Context
 import android.os.Bundle
+import io.github.muhrifqii.maos.MaosApplication
 import io.github.muhrifqii.maos.libs.qualifiers.ApplicationContext
 import java.lang.reflect.InvocationTargetException
 import java.util.HashMap
@@ -39,11 +40,13 @@ object ViewModelManager {
 //  private var fragmentViewModels =
 //      HashMap<String, FragmentViewModel<out LifecycleTypeFragment>>()
 
+  @Suppress("UNCHECKED_CAST")
   fun <T : ActivityViewModel<out LifecycleTypeActivity>> findActivity(context: Context,
       viewModelClass: Class<T>, savedInstanceState: Bundle?): T {
     val id = findId(savedInstanceState)
     val activityViewModel: ActivityViewModel<out LifecycleTypeActivity> =
-        activityViewModels[id] ?: createActivityViewModel(context, savedInstanceState, id)
+        activityViewModels[id] ?: createActivityViewModel(context, viewModelClass,
+            savedInstanceState, id)
 
     return activityViewModel as T
   }
@@ -60,8 +63,31 @@ object ViewModelManager {
     else UUID.randomUUID().toString()
   }
 
-  private fun createActivityViewModel(@ApplicationContext context: Context, state: Bundle?,
-      id: String)
+  private fun <T : ActivityViewModel<out LifecycleTypeActivity>> createActivityViewModel(
+      @ApplicationContext context: Context, clazz: Class<T>, state: Bundle?, id: String)
       : ActivityViewModel<out LifecycleTypeActivity> {
+    val params = (context as MaosApplication).component.viewModelParams()
+    val viewModel: ActivityViewModel<out LifecycleTypeActivity>
 
+    try {
+      val constructor = clazz.constructors.find { it == ViewModelParams::class }
+      viewModel = constructor!!.newInstance(params) as ActivityViewModel<out LifecycleTypeActivity>
+    } catch (ex: NullPointerException) {
+      throw RuntimeException(ex) // if the constructor null
+    } catch (ex: IllegalAccessException) {
+      throw RuntimeException(ex) // exception from newInstance(params)
+    } catch (ex: IllegalArgumentException) {
+      throw RuntimeException(ex) // exception from newInstance(params)
+    } catch (ex: InstantiationException) {
+      throw RuntimeException(ex) // exception from newInstance(params)
+    } catch (ex: InvocationTargetException) {
+      throw RuntimeException(ex) // exception from newInstance(params)
+    } catch (ex: ExceptionInInitializerError) {
+      throw RuntimeException(ex) // exception from newInstance(params)
+    }
+    activityViewModels.put(id, viewModel)
+    viewModel.onCreate(state)
+
+    return viewModel
+  }
 }

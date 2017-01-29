@@ -16,6 +16,7 @@
 
 package io.github.muhrifqii.maos.libs
 
+import android.content.SharedPreferences
 import android.os.Parcel
 import android.os.Parcelable
 import io.github.muhrifqii.maos.libs.extensions.createParcel
@@ -29,15 +30,22 @@ import io.github.muhrifqii.maos.libs.extensions.createParcel
  *
  * Wrapper for view model parameter in a parcelable BOILERPLATE!
  */
-data class ViewModelParams(var x: Int) : Parcelable {
+data class ViewModelParams(
+    var x: Int,
+    var sharedPreferences: SharedPreferences) : Parcelable {
   companion object {
     @JvmField val CREATOR: Parcelable.Creator<ViewModelParams> = createParcel(::ViewModelParams)
   }
 
-  constructor(source: Parcel) : this(source.readInt())
+  constructor(source: Parcel) : this(
+      source.readInt(),
+      source.readValue(SharedPreferences::class.java.classLoader) as SharedPreferences)
 
   override fun writeToParcel(destination: Parcel?, flag: Int) {
-    destination?.writeInt(x)
+    destination?.apply {
+      writeInt(x)
+      writeValue(sharedPreferences)
+    }
   }
 
   override fun describeContents(): Int = 0
