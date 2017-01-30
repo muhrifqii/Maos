@@ -22,6 +22,8 @@ import android.os.Bundle
 import android.support.annotation.CallSuper
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
+import io.github.muhrifqii.maos.AppComponent
+import io.github.muhrifqii.maos.MaosApplication
 import io.github.muhrifqii.maos.libs.extensions.find
 import io.github.muhrifqii.maos.ui.data.MaosActivityResult
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -43,7 +45,6 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
 
   private val VIEWMODEL_KEY_TO_BUNDLE = "view-model"
   private val back: PublishSubject<Unit> = PublishSubject.create()
-  private val disposables: CompositeDisposable = CompositeDisposable()
   protected var viewModel: TheViewModel? = null
 
   /**
@@ -63,7 +64,7 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
       viewModel?.onDropView()
     }
     back.bindToLifecycle(this).observeOn(AndroidSchedulers.mainThread())
-        .subscribe { onBackPressed() }
+        .subscribe { back() }
   }
 
   @CallSuper override fun onResume() {
@@ -109,9 +110,7 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
     viewModel?.setActivityResult(MaosActivityResult(requestCode, resultCode, data))
   }
 
-  override fun onBackPressed() {
-    back.onNext(Unit)
-  }
+  override fun onBackPressed() = back.onNext(Unit)
 
   /**
    * @return The ViewModel java class
@@ -123,7 +122,12 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
    */
   abstract fun transition(): Pair<Int, Int>
 
-  private fun back(run: (Unit) -> Unit) {
+  /**
+   * @return Dagger component
+   */
+  protected fun appComponent() = (application as MaosApplication).component
+
+  private fun back() {
     super.onBackPressed()
     val (transitionIn, transitionOut) = transition()
     overridePendingTransition(transitionIn, transitionOut)
