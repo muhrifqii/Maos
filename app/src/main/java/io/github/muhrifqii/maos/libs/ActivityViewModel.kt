@@ -19,7 +19,6 @@ package io.github.muhrifqii.maos.libs
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.CallSuper
-import com.trello.rxlifecycle2.LifecycleProvider
 import com.trello.rxlifecycle2.android.ActivityEvent
 import io.github.muhrifqii.maos.ui.data.MaosActivityResult
 import io.reactivex.Observable

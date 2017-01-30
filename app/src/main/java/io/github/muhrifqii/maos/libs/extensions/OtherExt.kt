@@ -16,6 +16,7 @@
 
 package io.github.muhrifqii.maos.libs.extensions
 
+import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 import android.os.Parcelable.Creator
@@ -28,9 +29,20 @@ import android.os.Parcelable.Creator
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
 
+/**
+ * Minimize Parcelable boilerplate of a creator object implementation
+ */
 inline fun <reified T : Parcelable> createParcel(crossinline createFromParcel: (Parcel) -> T?)
     : Parcelable.Creator<T> = object : Creator<T> {
   override fun createFromParcel(p0: Parcel?): T = createFromParcel(p0)
 
   override fun newArray(p0: Int): Array<out T?> = kotlin.arrayOfNulls(p0)
+}
+
+/**
+ * Optional find to a particular key on Bundle
+ * @return optional bundle
+ */
+fun Bundle?.find(key: String): Bundle? {
+  return if (this === null) null else getBundle(key)
 }
