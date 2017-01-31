@@ -19,8 +19,8 @@ package io.github.muhrifqii.maos.libs
 import android.content.Context
 import android.os.Bundle
 import io.github.muhrifqii.maos.MaosApplication
-import io.github.muhrifqii.maos.libs.extensions.find
 import io.github.muhrifqii.maos.libs.extensions.findMaybeNull
+import io.github.muhrifqii.maos.libs.extensions.remove
 import io.github.muhrifqii.maos.libs.qualifiers.ApplicationContext
 import java.lang.reflect.InvocationTargetException
 import java.util.HashMap
@@ -42,6 +42,9 @@ object ViewModelManager {
 //  private var fragmentViewModels =
 //      HashMap<String, FragmentViewModel<out LifecycleTypeFragment>>()
 
+  /**
+   * find ActivityViewModel state on the saved ActivityViewModel map
+   */
   @Suppress("UNCHECKED_CAST")
   fun <T : ActivityViewModel<out LifecycleTypeActivity>> findActivity(context: Context,
       viewModelClass: Class<T>, savedInstanceState: Bundle?): T {
@@ -59,10 +62,19 @@ object ViewModelManager {
 //
 //    val id = findId(savedInstanceState)
 //  }
+
+  /**
+   * save the ActivityViewModel state to handle lifecycle state changed
+   */
   fun <T : ActivityViewModel<out LifecycleTypeActivity>> saveActivity(viewModel: T,
       savedInstanceState: Bundle?) {
     savedInstanceState?.putString(KEY_VIEW_MODEL_ID, findIdForViewModel(viewModel))
     savedInstanceState?.putBundle(KEY_VIEW_MODEL_STATE, Bundle())
+  }
+
+  fun destroy(activityViewModel: ActivityViewModel<*>) {
+    activityViewModel.onDestroy()
+    activityViewModels.remove { it.value == activityViewModel }
   }
 
   private fun findId(state: Bundle?): String {

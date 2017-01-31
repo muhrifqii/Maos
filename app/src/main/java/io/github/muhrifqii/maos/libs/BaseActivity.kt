@@ -23,9 +23,7 @@ import android.support.annotation.AnimRes
 import android.support.annotation.CallSuper
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
-import io.github.muhrifqii.maos.AppComponent
 import io.github.muhrifqii.maos.MaosApplication
-import io.github.muhrifqii.maos.libs.extensions.find
 import io.github.muhrifqii.maos.libs.extensions.findMaybeNull
 import io.github.muhrifqii.maos.ui.data.MaosActivityResult
 import io.reactivex.android.schedulers.AndroidSchedulers
