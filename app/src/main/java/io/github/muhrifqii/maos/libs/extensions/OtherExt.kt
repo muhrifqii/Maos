@@ -41,8 +41,21 @@ inline fun <reified T : Parcelable> createParcel(crossinline createFromParcel: (
 
 /**
  * Optional find to a particular key on Bundle
- * @return optional bundle
+ * @return optional value
  */
-fun Bundle?.find(key: String): Bundle? {
-  return if (this === null) null else getBundle(key)
+inline fun <reified T> Bundle?.findMaybeNull(key: String): T? {
+  if (this === null) {
+    return null
+  }
+  return when (T::class) {
+    Boolean::class -> getBoolean(key) as T
+    BooleanArray::class -> getBooleanArray(key) as T
+    String::class -> getString(key) as T
+    Array<out String>::class -> getStringArray(key) as T
+    Int::class -> getInt(key) as T
+    IntArray::class -> getIntArray(key) as T
+    Double::class -> getDouble(key) as T
+    Bundle::class -> getBundle(key) as T
+    else -> throw RuntimeException("not yet handled")
+  }
 }

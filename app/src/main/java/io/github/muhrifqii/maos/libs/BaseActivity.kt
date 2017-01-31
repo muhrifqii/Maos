@@ -19,15 +19,16 @@ package io.github.muhrifqii.maos.libs
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.support.annotation.AnimRes
 import android.support.annotation.CallSuper
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.github.muhrifqii.maos.AppComponent
 import io.github.muhrifqii.maos.MaosApplication
 import io.github.muhrifqii.maos.libs.extensions.find
+import io.github.muhrifqii.maos.libs.extensions.findMaybeNull
 import io.github.muhrifqii.maos.ui.data.MaosActivityResult
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
@@ -52,14 +53,14 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
    */
   @CallSuper override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    Timber.d("OnCreate on %s", this.toString())
+    Timber.d("OnCreate on $this")
     attachViewModel(savedInstanceState)
     viewModel?.setIntent(intent)
   }
 
   @CallSuper override fun onStart() {
     super.onStart()
-    Timber.d("OnStart on %s", this.toString())
+    Timber.d("OnStart on $this")
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       viewModel?.onDropView()
     }
@@ -69,7 +70,7 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
 
   @CallSuper override fun onResume() {
     super.onResume()
-    Timber.d("OnResume on %s", this.toString())
+    Timber.d("OnResume on $this")
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
       viewModel?.onTakeView(this)
     }
@@ -77,7 +78,7 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
 
   @CallSuper override fun onPause() {
     super.onPause()
-    Timber.d("OnPause on %s", this.toString())
+    Timber.d("OnPause on $this")
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
       viewModel?.onDropView()
     }
@@ -85,7 +86,7 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
 
   @CallSuper override fun onStop() {
     super.onStop()
-    Timber.d("OnStop on %s", this.toString())
+    Timber.d("OnStop on $this")
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       viewModel?.onDropView()
     }
@@ -93,20 +94,23 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
 
   @CallSuper override fun onDestroy() {
     super.onDestroy()
-    Timber.d("OnDestroy on %s", this.toString())
+    Timber.d("OnDestroy on ${this}")
   }
 
   override fun onSaveInstanceState(outState: Bundle?) {
     super.onSaveInstanceState(outState)
+    Timber.d("OnSaveInstanceState on $this")
   }
 
   override fun onNewIntent(intent: Intent?) {
     super.onNewIntent(intent)
+    Timber.d("OnNewIntent on $this")
     viewModel?.setIntent(intent!!)
   }
 
   @CallSuper override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
+    Timber.d("OnActivityResult on $this")
     viewModel?.setActivityResult(MaosActivityResult(requestCode, resultCode, data))
   }
 
@@ -118,24 +122,32 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
   abstract fun viewModelClass(): Class<TheViewModel>
 
   /**
+   * Activity finish transition animation
    * @return enterAnim, exitAnim
    */
-  abstract fun transition(): Pair<Int, Int>
+  abstract fun finishActivityTransition(): Pair<Int, Int>
 
   /**
    * @return Dagger component
    */
   protected fun appComponent() = (application as MaosApplication).component
 
+  protected fun startActivity(intent: Intent, @AnimRes enterAnim: Int, @AnimRes exitAnim: Int) {
+    super.startActivity(intent)
+    Timber.d("StartActivity $this with transition")
+    overridePendingTransition(enterAnim, exitAnim)
+  }
+
   private fun back() {
     super.onBackPressed()
-    val (transitionIn, transitionOut) = transition()
+    Timber.d("navigating back")
+    val (transitionIn, transitionOut) = finishActivityTransition()
     overridePendingTransition(transitionIn, transitionOut)
   }
 
   private fun attachViewModel(bundle: Bundle?) {
     if (viewModel === null) viewModel = ViewModelManager
-        .findActivity(applicationContext, viewModelClass(), bundle.find(VIEWMODEL_KEY_TO_BUNDLE))
+        .findActivity(applicationContext, viewModelClass(), bundle.findMaybeNull(VIEWMODEL_KEY_TO_BUNDLE))
 
   }
 }

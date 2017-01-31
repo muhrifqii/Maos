@@ -19,6 +19,8 @@ package io.github.muhrifqii.maos.libs
 import android.content.Context
 import android.os.Bundle
 import io.github.muhrifqii.maos.MaosApplication
+import io.github.muhrifqii.maos.libs.extensions.find
+import io.github.muhrifqii.maos.libs.extensions.findMaybeNull
 import io.github.muhrifqii.maos.libs.qualifiers.ApplicationContext
 import java.lang.reflect.InvocationTargetException
 import java.util.HashMap
@@ -34,6 +36,7 @@ import java.util.UUID
 object ViewModelManager {
 
   private val KEY_VIEW_MODEL_ID: String = "key-id-view-model"
+  private val KEY_VIEW_MODEL_STATE: String = "key-state-view-model"
   private var activityViewModels =
       HashMap<String, ActivityViewModel<out LifecycleTypeActivity>>()
 //  private var fragmentViewModels =
@@ -50,16 +53,29 @@ object ViewModelManager {
     return activityViewModel as T
   }
 
-//  fun <T : FragmentViewModel<out LifecycleTypeFragment>> findFragment(context: Context,
+  //  fun <T : FragmentViewModel<out LifecycleTypeFragment>> findFragment(context: Context,
 //      viewModelClass: Class<T>,
 //      savedInstanceState: Bundle?): T {
 //
 //    val id = findId(savedInstanceState)
 //  }
+  fun <T : ActivityViewModel<out LifecycleTypeActivity>> saveActivity(viewModel: T,
+      savedInstanceState: Bundle?) {
+    savedInstanceState?.putString(KEY_VIEW_MODEL_ID, findIdForViewModel(viewModel))
+    savedInstanceState?.putBundle(KEY_VIEW_MODEL_STATE, Bundle())
+  }
 
   private fun findId(state: Bundle?): String {
     return if (state !== null) state.getString(KEY_VIEW_MODEL_ID)
     else UUID.randomUUID().toString()
+  }
+
+  private fun findIdForViewModel(activityViewModel: ActivityViewModel<*>): String {
+    try {
+      return activityViewModels.entries.find { it.value == activityViewModel }?.key!!
+    } catch (ex: NullPointerException) {
+      throw RuntimeException("No view model in the map!")
+    }
   }
 
   private fun <T : ActivityViewModel<out LifecycleTypeActivity>> createActivityViewModel(
@@ -85,7 +101,7 @@ object ViewModelManager {
       throw RuntimeException(ex) // exception from newInstance(params)
     }
     activityViewModels.put(id, viewModel)
-    viewModel.onCreate(state)
+    viewModel.onCreate(state.findMaybeNull(KEY_VIEW_MODEL_STATE))
 
     return viewModel
   }
