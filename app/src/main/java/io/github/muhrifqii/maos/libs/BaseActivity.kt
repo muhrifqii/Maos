@@ -93,11 +93,23 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
   @CallSuper override fun onDestroy() {
     super.onDestroy()
     Timber.d("OnDestroy on ${this}")
+    if (isFinishing){
+      if (viewModel !== null){
+        ViewModelManager.destroy(viewModel!!)
+        viewModel = null
+      }
+    }
   }
 
-  override fun onSaveInstanceState(outState: Bundle?) {
+  override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
     Timber.d("OnSaveInstanceState on $this")
+    val viewModelBundle = Bundle()
+    if (viewModel !== null) {
+      // this one is strange, viewModel already checked if it is nonnull type
+      ViewModelManager.saveActivity(viewModel!!, viewModelBundle)
+    }
+    outState.putBundle(VIEWMODEL_KEY_TO_BUNDLE, viewModelBundle)
   }
 
   override fun onNewIntent(intent: Intent?) {
@@ -115,6 +127,20 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
   override fun onBackPressed() = back.onNext(Unit)
 
   /**
+   * @return Dagger component
+   */
+  protected fun appComponent() = (application as MaosApplication).component
+
+  protected fun startActivity(intent: Intent,
+      @AnimRes enterAnim: Int? = null, @AnimRes exitAnim: Int? = null) {
+    super.startActivity(intent)
+    if (enterAnim !== null && exitAnim !== null) {
+      Timber.d("StartActivity $this with transition")
+      overridePendingTransition(enterAnim, exitAnim)
+    }
+  }
+
+  /**
    * @return The ViewModel java class
    */
   abstract fun viewModelClass(): Class<TheViewModel>
@@ -125,17 +151,6 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
    */
   abstract fun finishActivityTransition(): Pair<Int, Int>
 
-  /**
-   * @return Dagger component
-   */
-  protected fun appComponent() = (application as MaosApplication).component
-
-  protected fun startActivity(intent: Intent, @AnimRes enterAnim: Int, @AnimRes exitAnim: Int) {
-    super.startActivity(intent)
-    Timber.d("StartActivity $this with transition")
-    overridePendingTransition(enterAnim, exitAnim)
-  }
-
   private fun back() {
     super.onBackPressed()
     Timber.d("navigating back")
@@ -144,8 +159,9 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
   }
 
   private fun attachViewModel(bundle: Bundle?) {
-    if (viewModel === null) viewModel = ViewModelManager
-        .findActivity(applicationContext, viewModelClass(), bundle.findMaybeNull(VIEWMODEL_KEY_TO_BUNDLE))
+    if (viewModel === null) viewModel =
+        ViewModelManager.findActivity(applicationContext, viewModelClass(),
+            bundle.findMaybeNull(VIEWMODEL_KEY_TO_BUNDLE))
 
   }
 }

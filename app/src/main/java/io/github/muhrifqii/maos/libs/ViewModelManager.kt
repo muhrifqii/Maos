@@ -43,7 +43,8 @@ object ViewModelManager {
 //      HashMap<String, FragmentViewModel<out LifecycleTypeFragment>>()
 
   /**
-   * find ActivityViewModel state on the saved ActivityViewModel map
+   * find ActivityViewModel state on the saved ActivityViewModel map. If state is null, then create
+   * a new entry set on ActivityViewModel map
    */
   @Suppress("UNCHECKED_CAST")
   fun <T : ActivityViewModel<out LifecycleTypeActivity>> findActivity(context: Context,
