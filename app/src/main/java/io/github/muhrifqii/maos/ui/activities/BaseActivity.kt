@@ -14,16 +14,21 @@
  *    limitations under the License.
  */
 
-package io.github.muhrifqii.maos.libs
+package io.github.muhrifqii.maos.ui.activities
 
 import android.content.Intent
 import android.os.Build
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.support.annotation.AnimRes
 import android.support.annotation.CallSuper
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.github.muhrifqii.maos.MaosApplication
+import io.github.muhrifqii.maos.libs.ActivityViewModel
+import io.github.muhrifqii.maos.libs.LifecycleTypeActivity
+import io.github.muhrifqii.maos.libs.ViewModelManager
 import io.github.muhrifqii.maos.libs.extensions.findMaybeNull
 import io.github.muhrifqii.maos.ui.data.MaosActivityResult
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -59,7 +64,7 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
   @CallSuper override fun onStart() {
     super.onStart()
     Timber.d("OnStart on $this")
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    if (VERSION.SDK_INT >= VERSION_CODES.N) {
       viewModel?.onDropView()
     }
     back.bindToLifecycle(this).observeOn(AndroidSchedulers.mainThread())
@@ -69,7 +74,7 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
   @CallSuper override fun onResume() {
     super.onResume()
     Timber.d("OnResume on $this")
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+    if (VERSION.SDK_INT < VERSION_CODES.N) {
       viewModel?.onTakeView(this)
     }
   }
@@ -77,7 +82,7 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
   @CallSuper override fun onPause() {
     super.onPause()
     Timber.d("OnPause on $this")
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+    if (VERSION.SDK_INT < VERSION_CODES.N) {
       viewModel?.onDropView()
     }
   }
@@ -85,7 +90,7 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
   @CallSuper override fun onStop() {
     super.onStop()
     Timber.d("OnStop on $this")
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    if (VERSION.SDK_INT >= VERSION_CODES.N) {
       viewModel?.onDropView()
     }
   }
@@ -93,15 +98,15 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
   @CallSuper override fun onDestroy() {
     super.onDestroy()
     Timber.d("OnDestroy on ${this}")
-    if (isFinishing){
-      if (viewModel !== null){
+    if (isFinishing) {
+      if (viewModel !== null) {
         ViewModelManager.destroy(viewModel!!)
         viewModel = null
       }
     }
   }
 
-  override fun onSaveInstanceState(outState: Bundle) {
+  @CallSuper override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
     Timber.d("OnSaveInstanceState on $this")
     val viewModelBundle = Bundle()
@@ -112,7 +117,7 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
     outState.putBundle(VIEWMODEL_KEY_TO_BUNDLE, viewModelBundle)
   }
 
-  override fun onNewIntent(intent: Intent?) {
+  @CallSuper override fun onNewIntent(intent: Intent?) {
     super.onNewIntent(intent)
     Timber.d("OnNewIntent on $this")
     viewModel?.setIntent(intent!!)
@@ -149,13 +154,16 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeAc
    * Activity finish transition animation
    * @return enterAnim, exitAnim
    */
-  abstract fun finishActivityTransition(): Pair<Int, Int>
+  abstract fun finishActivityTransition(): Pair<Int, Int>?
 
   private fun back() {
     super.onBackPressed()
     Timber.d("navigating back")
-    val (transitionIn, transitionOut) = finishActivityTransition()
-    overridePendingTransition(transitionIn, transitionOut)
+    val transition = finishActivityTransition()
+    if (transition !== null) {
+      val (transitionIn, transitionOut) = transition
+      overridePendingTransition(transitionIn, transitionOut)
+    }
   }
 
   private fun attachViewModel(bundle: Bundle?) {
