@@ -19,6 +19,8 @@ package io.github.muhrifqii.maos.libs
 import com.trello.rxlifecycle2.LifecycleProvider
 import com.trello.rxlifecycle2.LifecycleTransformer
 import com.trello.rxlifecycle2.RxLifecycle
+import com.trello.rxlifecycle2.android.ActivityEvent
+import com.trello.rxlifecycle2.android.FragmentEvent
 import com.trello.rxlifecycle2.android.RxLifecycleAndroid
 import io.reactivex.Observable
 
@@ -29,8 +31,15 @@ import io.reactivex.Observable
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-class EmptyLifecycleType<Event> : LifecycleType<Event> {
-  override fun lifecycle(): Observable<Event> {
+
+class EmptyLifecycleActivityType : LifecycleActivityType {
+  override fun lifecycle(): Observable<ActivityEvent> {
+    return Observable.empty()
+  }
+}
+
+class EmptyLifecycleFragmentType : LifecycleFragmentType {
+  override fun lifecycle(): Observable<FragmentEvent> {
     return Observable.empty()
   }
 }

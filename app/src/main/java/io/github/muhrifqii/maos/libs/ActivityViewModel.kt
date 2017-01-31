@@ -33,11 +33,12 @@ import timber.log.Timber
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-open class ActivityViewModel<TheView> where TheView : LifecycleTypeActivity {
+open class ActivityViewModel<TheView>(params: ViewModelParams) // enables reflection on subclass
+where TheView : LifecycleActivityType {
 
-  private val viewChange: PublishSubject<LifecycleTypeActivity> = PublishSubject.create()
+  private val viewChange: PublishSubject<LifecycleActivityType> = PublishSubject.create()
   private val view: Observable<TheView> =
-      viewChange.filter { it !is EmptyLifecycleType<*> }.map { it as TheView }
+      viewChange.filter { it !is EmptyLifecycleActivityType }.map { it as TheView }
   private val disposables: CompositeDisposable = CompositeDisposable()
   private val activityResult: PublishSubject<MaosActivityResult> = PublishSubject.create()
   private val intent: PublishSubject<Intent> = PublishSubject.create()
@@ -55,14 +56,14 @@ open class ActivityViewModel<TheView> where TheView : LifecycleTypeActivity {
    */
   @CallSuper open fun onCreate(savedInstanceState: Bundle?) {
     Timber.d("onCreate %s", this.toString())
-    val x = EmptyLifecycleType<ActivityEvent>() as LifecycleTypeActivity
+    val x = EmptyLifecycleActivityType()
     viewChange.onNext(x)
   }
 
   /**
    * begin to change the view
    */
-  @CallSuper open fun <TheView : LifecycleTypeActivity> onTakeView(view: TheView) {
+  @CallSuper open fun <TheView : LifecycleActivityType> onTakeView(view: TheView) {
     Timber.d("onTakeView %s in %s", this.toString(), view.toString())
     viewChange.onNext(view)
   }
@@ -72,7 +73,7 @@ open class ActivityViewModel<TheView> where TheView : LifecycleTypeActivity {
    */
   @CallSuper open fun onDropView() {
     Timber.d("onDropView %s", this.toString())
-    val x = EmptyLifecycleType<ActivityEvent>() as LifecycleTypeActivity
+    val x = EmptyLifecycleActivityType()
     viewChange.onNext(x)
   }
 

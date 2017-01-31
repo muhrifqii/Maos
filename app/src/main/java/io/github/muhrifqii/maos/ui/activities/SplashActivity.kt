@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import io.github.muhrifqii.maos.R.layout
 import io.github.muhrifqii.maos.libs.extensions.intentToClass
+import io.github.muhrifqii.maos.viewmodels.SplashViewModel
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -35,7 +36,7 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity<SplashViewModel>() {
 
   val subs: CompositeDisposable = CompositeDisposable()
 
@@ -50,6 +51,14 @@ class SplashActivity : AppCompatActivity() {
   override fun onDestroy() {
     super.onDestroy()
     subs.clear()
+  }
+
+  override fun viewModelClass(): Class<SplashViewModel> {
+    return SplashViewModel::class.java
+  }
+
+  override fun finishActivityTransition(): Pair<Int, Int>? {
+    return null
   }
 
   fun complete(): () -> Unit = {

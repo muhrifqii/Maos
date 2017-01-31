@@ -35,5 +35,5 @@ interface LifecycleType<E> {
   fun lifecycle(): Observable<E>
 }
 // differ these two to handle incompatibility of override-equivalent
-interface LifecycleTypeActivity : LifecycleType<ActivityEvent>
-interface LifecycleTypeFragment : LifecycleType<FragmentEvent>
+interface LifecycleActivityType : LifecycleType<ActivityEvent>
+interface LifecycleFragmentType : LifecycleType<FragmentEvent>

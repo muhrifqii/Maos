@@ -22,6 +22,7 @@ import io.github.muhrifqii.maos.MaosApplication
 import io.github.muhrifqii.maos.libs.extensions.findMaybeNull
 import io.github.muhrifqii.maos.libs.extensions.remove
 import io.github.muhrifqii.maos.libs.qualifiers.ApplicationContext
+import java.lang.reflect.Constructor
 import java.lang.reflect.InvocationTargetException
 import java.util.HashMap
 import java.util.UUID
@@ -38,7 +39,7 @@ object ViewModelManager {
   private val KEY_VIEW_MODEL_ID: String = "key-id-view-model"
   private val KEY_VIEW_MODEL_STATE: String = "key-state-view-model"
   private var activityViewModels =
-      HashMap<String, ActivityViewModel<out LifecycleTypeActivity>>()
+      HashMap<String, ActivityViewModel<out LifecycleActivityType>>()
 //  private var fragmentViewModels =
 //      HashMap<String, FragmentViewModel<out LifecycleTypeFragment>>()
 
@@ -47,10 +48,10 @@ object ViewModelManager {
    * a new entry set on ActivityViewModel map
    */
   @Suppress("UNCHECKED_CAST")
-  fun <T : ActivityViewModel<out LifecycleTypeActivity>> findActivity(context: Context,
+  fun <T : ActivityViewModel<out LifecycleActivityType>> findActivity(context: Context,
       viewModelClass: Class<T>, savedInstanceState: Bundle?): T {
     val id = findId(savedInstanceState)
-    val activityViewModel: ActivityViewModel<out LifecycleTypeActivity> =
+    val activityViewModel: ActivityViewModel<out LifecycleActivityType> =
         activityViewModels[id] ?: createActivityViewModel(context, viewModelClass,
             savedInstanceState, id)
 
@@ -67,7 +68,7 @@ object ViewModelManager {
   /**
    * save the ActivityViewModel state to handle lifecycle state changed
    */
-  fun <T : ActivityViewModel<out LifecycleTypeActivity>> saveActivity(viewModel: T,
+  fun <T : ActivityViewModel<out LifecycleActivityType>> saveActivity(viewModel: T,
       savedInstanceState: Bundle?) {
     savedInstanceState?.putString(KEY_VIEW_MODEL_ID, findIdForViewModel(viewModel))
     savedInstanceState?.putBundle(KEY_VIEW_MODEL_STATE, Bundle())
@@ -91,15 +92,16 @@ object ViewModelManager {
     }
   }
 
-  private fun <T : ActivityViewModel<out LifecycleTypeActivity>> createActivityViewModel(
+  private fun <T : ActivityViewModel<out LifecycleActivityType>> createActivityViewModel(
       @ApplicationContext context: Context, clazz: Class<T>, state: Bundle?, id: String)
-      : ActivityViewModel<out LifecycleTypeActivity> {
+      : ActivityViewModel<out LifecycleActivityType> {
     val params = (context as MaosApplication).component.viewModelParams()
-    val viewModel: ActivityViewModel<out LifecycleTypeActivity>
+    val viewModel: ActivityViewModel<out LifecycleActivityType>
 
     try {
-      val constructor = clazz.constructors.find { it == ViewModelParams::class.java }
-      viewModel = constructor!!.newInstance(params) as ActivityViewModel<out LifecycleTypeActivity>
+      val constructor = clazz.getConstructor(ViewModelParams::class.java)
+      val x = 1
+      viewModel = constructor!!.newInstance(params) as ActivityViewModel<out LifecycleActivityType>
     } catch (ex: NullPointerException) {
       throw RuntimeException(ex) // if the constructor null
     } catch (ex: IllegalAccessException) {

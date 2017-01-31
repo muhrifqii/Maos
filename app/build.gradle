@@ -30,9 +30,9 @@ ext {
   retrofit_version = '2.1.0'
 }
 
-//kapt {
-//  generateStubs = true
-//}
+kapt {
+  generateStubs = true
+}
 
 dependencies {
   compile fileTree(include: ['*.jar'], dir: 'libs')

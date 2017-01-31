@@ -17,7 +17,6 @@
 package io.github.muhrifqii.maos.ui.activities
 
 import android.content.Intent
-import android.os.Build
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
@@ -27,7 +26,7 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.github.muhrifqii.maos.MaosApplication
 import io.github.muhrifqii.maos.libs.ActivityViewModel
-import io.github.muhrifqii.maos.libs.LifecycleTypeActivity
+import io.github.muhrifqii.maos.libs.LifecycleActivityType
 import io.github.muhrifqii.maos.libs.ViewModelManager
 import io.github.muhrifqii.maos.libs.extensions.findMaybeNull
 import io.github.muhrifqii.maos.ui.data.MaosActivityResult
@@ -44,8 +43,8 @@ import timber.log.Timber
  *
  * All ViewModel and lifecycle handling in here
  */
-abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleTypeActivity>>
-  : RxAppCompatActivity(), LifecycleTypeActivity {
+abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleActivityType>>
+  : RxAppCompatActivity(), LifecycleActivityType {
 
   private val VIEWMODEL_KEY_TO_BUNDLE = "view-model"
   private val back: PublishSubject<Unit> = PublishSubject.create()

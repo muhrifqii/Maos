@@ -14,23 +14,32 @@
  *    limitations under the License.
  */
 
-package io.github.muhrifqii.maos
+package io.github.muhrifqii.maos.ui.views
 
-import dagger.Component
-import io.github.muhrifqii.maos.libs.ViewModelParams
-import io.github.muhrifqii.maos.ui.activities.MainActivity
-import javax.inject.Singleton
+import android.content.Context
+import android.support.annotation.CallSuper
+import android.support.v7.widget.Toolbar
+import android.util.AttributeSet
+import io.reactivex.disposables.CompositeDisposable
 
 /**
- * Created on   : 23/01/17
+ * Created on   : 01/02/17
  * Author       : muhrifqii
  * Name         : Muhammad Rifqi Fatchurrahman Putra Danar
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
+open class MaosToolbar : Toolbar {
 
-@Singleton
-@Component(modules = arrayOf(AppModule::class))
-interface AppComponent {
-  fun viewModelParams(): ViewModelParams
+  protected val disposables: CompositeDisposable = CompositeDisposable()
+
+  constructor(context: Context) : super(context)
+  constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+  constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs,
+      defStyleAttr)
+
+  @CallSuper override fun onDetachedFromWindow() {
+    super.onDetachedFromWindow()
+    disposables.clear()
+  }
 }
