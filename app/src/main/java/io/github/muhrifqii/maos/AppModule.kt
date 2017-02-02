@@ -24,10 +24,16 @@ import android.content.pm.PackageManager
 import android.content.res.AssetManager
 import android.content.res.Resources
 import android.preference.PreferenceManager
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import io.github.muhrifqii.maos.libs.ViewModelParams
 import io.github.muhrifqii.maos.libs.qualifiers.ApplicationContext
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 /**
@@ -60,6 +66,23 @@ class AppModule(val app: MaosApplication) {
   @Provides @Singleton
   fun provideSharedPreferences(): SharedPreferences =
       PreferenceManager.getDefaultSharedPreferences(app)
+
+  @Provides @Singleton
+  fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor =
+      HttpLoggingInterceptor().setLevel(BODY) // log body and header
+
+  @Provides @Singleton
+  fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
+      OkHttpClient.Builder().apply {
+        if (BuildConfig.DEBUG) addInterceptor(httpLoggingInterceptor)
+      }.build() // network log ez
+
+  @Provides @Singleton
+  fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
+      Retrofit.Builder().apply {
+        client(okHttpClient)
+        addConverterFactory(MoshiConverterFactory.create(moshi))
+      }.build()
 
   @Provides @Singleton
   fun provideViewModelParams(sharedPreferences: SharedPreferences): ViewModelParams =

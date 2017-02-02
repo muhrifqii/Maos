@@ -27,6 +27,7 @@ android {
 ext {
   supportlib_version = '25.0.1'
   rxlifecycle_version = '2.0.1'
+  okhttp_version = '3.6.0'
   retrofit_version = '2.1.0'
 }
 
@@ -62,6 +63,8 @@ dependencies {
   debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
   releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
   // network related
+  compile "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+  testCompile "com.squareup.okhttp3:mockwebserver:$okhttp_version"
   compile "com.squareup.retrofit2:retrofit:$retrofit_version"
   compile "com.squareup.retrofit2:converter-moshi:$retrofit_version"
   compile("com.squareup.retrofit2:converter-simplexml:$retrofit_version"){
