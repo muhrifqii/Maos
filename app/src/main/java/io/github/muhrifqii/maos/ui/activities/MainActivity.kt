@@ -19,7 +19,6 @@ package io.github.muhrifqii.maos.ui.activities
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import io.github.muhrifqii.maos.R
-import io.github.muhrifqii.maos.R.layout
 
 /**
  * Created on   : 21/01/17
@@ -33,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(layout.activity_main)
+    setContentView(R.layout.activity_main)
   }
 
   override fun onDestroy() {

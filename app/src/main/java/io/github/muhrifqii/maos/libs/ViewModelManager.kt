@@ -100,7 +100,6 @@ object ViewModelManager {
 
     try {
       val constructor = clazz.getConstructor(ViewModelParams::class.java)
-      val x = 1
       viewModel = constructor!!.newInstance(params) as ActivityViewModel<out LifecycleActivityType>
     } catch (ex: NullPointerException) {
       throw RuntimeException(ex) // if the constructor null

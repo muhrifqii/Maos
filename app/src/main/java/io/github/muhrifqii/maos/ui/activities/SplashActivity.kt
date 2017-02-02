@@ -23,6 +23,7 @@ import io.github.muhrifqii.maos.R.layout
 import io.github.muhrifqii.maos.libs.extensions.intentToClass
 import io.github.muhrifqii.maos.viewmodels.SplashViewModel
 import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -45,6 +46,7 @@ class SplashActivity : BaseActivity<SplashViewModel>() {
     setContentView(layout.activity_splash)
 
     subs.add(Completable.timer(1500, MILLISECONDS, Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe(complete(), error()))
   }
 

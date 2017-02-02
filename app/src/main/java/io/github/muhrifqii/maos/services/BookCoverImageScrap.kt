@@ -14,24 +14,24 @@
  *    limitations under the License.
  */
 
-package io.github.muhrifqii.maos
+package io.github.muhrifqii.maos.services
 
-import dagger.Component
-import io.github.muhrifqii.maos.libs.ViewModelParams
-import io.github.muhrifqii.maos.ui.activities.MainActivity
-import javax.inject.Singleton
+import io.github.muhrifqii.maos.services.AmazonImageCode.DEFAULT
 
 /**
- * Created on   : 23/01/17
+ * Created on   : 01/02/17
  * Author       : muhrifqii
  * Name         : Muhammad Rifqi Fatchurrahman Putra Danar
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
+ * http://aaugh.com/imageabuse.html
  */
+object BookCoverImageScrap {
+  fun fromIsbn10(isbn: String, code: AmazonImageCode = DEFAULT): String {
+    return "http://images.amazon.com/images/P/$isbn.01.${code.value}.jpg"
+  }
+}
 
-@Singleton
-@Component(modules = arrayOf(AppModule::class))
-interface AppComponent {
-  fun viewModelParams(): ViewModelParams
-  fun inject(x: MainActivity)
+enum class AmazonImageCode(val value: String) {
+  DEFAULT(""), SMALL("THUMB"), MEDIUM("TZZZ"), LARGE("LZ")
 }
