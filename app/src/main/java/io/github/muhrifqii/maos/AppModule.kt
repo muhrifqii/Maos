@@ -24,11 +24,16 @@ import android.content.pm.PackageManager
 import android.content.res.AssetManager
 import android.content.res.Resources
 import android.preference.PreferenceManager
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import com.serjltt.moshi.adapters.FirstElementJsonAdapter
+import com.serjltt.moshi.adapters.WrappedJsonAdapter
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
+import io.github.muhrifqii.maos.libs.Secrets
 import io.github.muhrifqii.maos.libs.ViewModelParams
 import io.github.muhrifqii.maos.libs.qualifiers.ApplicationContext
+import io.github.muhrifqii.maos.libs.qualifiers.IsbndbRetrofit
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
@@ -72,17 +77,20 @@ class AppModule(val app: MaosApplication) {
       HttpLoggingInterceptor().setLevel(BODY) // log body and header
 
   @Provides @Singleton
+  fun provideMoshi(): Moshi = Moshi.Builder().apply {
+    add(WrappedJsonAdapter.FACTORY)
+    add(FirstElementJsonAdapter.FACTORY)
+  }.build()
+
+  @Provides @Singleton
   fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
       OkHttpClient.Builder().apply {
         if (BuildConfig.DEBUG) addInterceptor(httpLoggingInterceptor)
       }.build() // network log ez
 
-  @Provides @Singleton
-  fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
-      Retrofit.Builder().apply {
-        client(okHttpClient)
-        addConverterFactory(MoshiConverterFactory.create(moshi))
-      }.build()
+  @Provides @Singleton @IsbndbRetrofit
+  fun provideIsbndbRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
+      createRetrofit("http://isbndb.com/api/v2/json/${Secrets.ISBNDB_API_KEY}", okHttpClient, moshi)
 
   @Provides @Singleton
   fun provideViewModelParams(sharedPreferences: SharedPreferences): ViewModelParams =
@@ -90,4 +98,12 @@ class AppModule(val app: MaosApplication) {
           x = 0,
           sharedPreferences = sharedPreferences
       )
+
+  private fun createRetrofit(baseUrl: String, okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
+      Retrofit.Builder().apply {
+        client(okHttpClient)
+        baseUrl(baseUrl)
+        addConverterFactory(MoshiConverterFactory.create(moshi))
+        addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+      }.build()
 }

@@ -25,6 +25,4 @@ import javax.inject.Qualifier
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-@Qualifier
-@Retention
-annotation class PackageNameStr
+@Qualifier @Retention annotation class PackageNameStr

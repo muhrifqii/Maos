@@ -19,11 +19,11 @@ package io.github.muhrifqii.maos.libs.qualifiers
 import javax.inject.Qualifier
 
 /**
- * Created on   : 28/01/17
+ * Created on   : 03/02/17
  * Author       : muhrifqii
  * Name         : Muhammad Rifqi Fatchurrahman Putra Danar
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
 
-@Qualifier @Retention annotation class ApplicationContext
+@Qualifier @Retention annotation class IsbndbRetrofit

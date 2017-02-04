@@ -14,16 +14,36 @@
  *    limitations under the License.
  */
 
-package io.github.muhrifqii.maos.libs.qualifiers
-
-import javax.inject.Qualifier
+package io.github.muhrifqii.maos.models
 
 /**
- * Created on   : 28/01/17
+ * Created on   : 03/02/17
  * Author       : muhrifqii
  * Name         : Muhammad Rifqi Fatchurrahman Putra Danar
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
+data class Book(
+    //    val dewey_decimal: String,
+    //    val notes: String,
+    //    val lcc_number:String,
+    val book_id: String,
+    val isbn10: String,
+    val isbn13: String,
+    val title: String,
+    val title_latin: String,
+    val title_long: String,
+    val author_data: List<AuthorData>,
+    val publisher_id: String,
+    val publisher_text: String,
+    val publisher_name: String,
+    val edition_info: String,
+    val summary: String,
+    val physical_description_text: String,
+    val urls_text: String,
+    val awards_text: String,
+    val language: String,
+    val dewey_normal: Float
+)
 
-@Qualifier @Retention annotation class ApplicationContext
+data class AuthorData(val name: String, val id: String)

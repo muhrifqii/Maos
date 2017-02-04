@@ -14,16 +14,37 @@
  *    limitations under the License.
  */
 
-package io.github.muhrifqii.maos.libs.qualifiers
+package io.github.muhrifqii.maos.services
 
-import javax.inject.Qualifier
+import com.serjltt.moshi.adapters.FirstElement
+import com.serjltt.moshi.adapters.Wrapped
+import io.github.muhrifqii.maos.models.Book
+import io.reactivex.Observable
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
- * Created on   : 28/01/17
+ * Created on   : 03/02/17
  * Author       : muhrifqii
  * Name         : Muhammad Rifqi Fatchurrahman Putra Danar
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
+interface IsbndbApi {
+  /**
+   * @param key isbn10 or isbn13 or isbndb_id
+   */
+  @GET("/book/{key}") // need to test this
+  @Wrapped("data") @FirstElement fun aBook(@Path("key") key: String) : Observable<Book>
 
-@Qualifier @Retention annotation class ApplicationContext
+  /**
+   * @param query a search query
+   * @param type null for query by title
+   * @param page null for page 1
+   */
+  @GET("/books")
+  @Wrapped("data") fun booksBy(@Query("q") query: String,
+      @Query("i") type: String? = null,
+      @Query("p") page: Int? = null) : Observable<List<Book>>
+}
