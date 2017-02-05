@@ -16,26 +16,13 @@
 
 package io.github.muhrifqii.maos.libs.extensions
 
-import android.support.annotation.LayoutRes
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.content.Context
+import com.trello.rxlifecycle2.components.support.RxFragment
 
 /**
- * Created on   : 25/01/17
+ * Created on   : 05/02/17
  * Author       : muhrifqii
  * Name         : Muhammad Rifqi Fatchurrahman Putra Danar
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-
-fun View.show() {
-  visibility = View.VISIBLE
-}
-
-fun View.hide() {
-  visibility = View.GONE
-}
-
-fun ViewGroup.inflate(@LayoutRes layoutResId: Int, attachToRoot: Boolean = false) =
-    LayoutInflater.from(this.context).inflate(layoutResId, this, attachToRoot)

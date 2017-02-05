@@ -36,63 +36,94 @@ import java.util.UUID
  */
 object ViewModelManager {
 
-  private val KEY_VIEW_MODEL_ID: String = "key-id-view-model"
-  private val KEY_VIEW_MODEL_STATE: String = "key-state-view-model"
+  private val KEY_ACTIVITY_VIEW_MODEL_ID: String = "key-id-activity-view-model"
+  private val KEY_FRAGMENT_VIEW_MODEL_ID: String = "key-id-fragment-view-model"
+  private val KEY_ACTIVITY_VIEW_MODEL_STATE: String = "key-state-activity-view-model"
+  private val KEY_FRAGMENT_VIEW_MODEL_STATE: String = "key-state-fragment-view-model"
   private var activityViewModels =
       HashMap<String, ActivityViewModel<out LifecycleActivityType>>()
-//  private var fragmentViewModels =
-//      HashMap<String, FragmentViewModel<out LifecycleTypeFragment>>()
+  private var fragmentViewModels =
+      HashMap<String, FragmentViewModel<out LifecycleFragmentType>>()
 
   /**
    * find ActivityViewModel state on the saved ActivityViewModel map. If state is null, then create
    * a new entry set on ActivityViewModel map
    */
   @Suppress("UNCHECKED_CAST")
-  fun <T : ActivityViewModel<out LifecycleActivityType>> findActivity(context: Context,
+  fun <T : ActivityViewModel<out LifecycleActivityType>> find(context: Context,
       viewModelClass: Class<T>, savedInstanceState: Bundle?): T {
-    val id = findId(savedInstanceState)
-    val activityViewModel: ActivityViewModel<out LifecycleActivityType> =
-        activityViewModels[id] ?: createActivityViewModel(context, viewModelClass,
+    val id = findId(savedInstanceState, KEY_ACTIVITY_VIEW_MODEL_ID)
+    val viewModel: ActivityViewModel<out LifecycleActivityType> =
+        activityViewModels[id] ?: createViewModel(context, viewModelClass,
             savedInstanceState, id)
 
-    return activityViewModel as T
+    return viewModel as T
   }
 
-  //  fun <T : FragmentViewModel<out LifecycleTypeFragment>> findFragment(context: Context,
-//      viewModelClass: Class<T>,
-//      savedInstanceState: Bundle?): T {
-//
-//    val id = findId(savedInstanceState)
-//  }
+  /**
+   * find FragmentViewModel state on the saved FragmentViewModel map. If state is null, then create
+   * a new entry set on FragmentViewModel map
+   */
+  @Suppress("UNCHECKED_CAST")
+  fun <T : FragmentViewModel<out LifecycleFragmentType>> find(context: Context,
+      viewModelClass: Class<T>, savedInstanceState: Bundle?): T {
+    val id = findId(savedInstanceState, KEY_FRAGMENT_VIEW_MODEL_ID)
+    val viewModel: FragmentViewModel<out LifecycleFragmentType> =
+        fragmentViewModels[id] ?: createViewModel(context, viewModelClass,
+            savedInstanceState, id)
+
+    return viewModel as T
+  }
 
   /**
    * save the ActivityViewModel state to handle lifecycle state changed
    */
-  fun <T : ActivityViewModel<out LifecycleActivityType>> saveActivity(viewModel: T,
+  fun <T : ActivityViewModel<out LifecycleActivityType>> save(viewModel: T,
       savedInstanceState: Bundle?) {
-    savedInstanceState?.putString(KEY_VIEW_MODEL_ID, findIdForViewModel(viewModel))
-    savedInstanceState?.putBundle(KEY_VIEW_MODEL_STATE, Bundle())
+    savedInstanceState?.putString(KEY_ACTIVITY_VIEW_MODEL_ID, findIdForViewModel(viewModel))
+    savedInstanceState?.putBundle(KEY_ACTIVITY_VIEW_MODEL_STATE, Bundle())
+  }
+
+  /**
+   * save the FragmentViewModel state to handle lifecycle state changed
+   */
+  fun <T : FragmentViewModel<out LifecycleFragmentType>> save(viewModel: T,
+      savedInstanceState: Bundle?) {
+    savedInstanceState?.putString(KEY_FRAGMENT_VIEW_MODEL_ID, findIdForViewModel(viewModel))
+    savedInstanceState?.putBundle(KEY_FRAGMENT_VIEW_MODEL_STATE, Bundle())
   }
 
   fun destroy(activityViewModel: ActivityViewModel<*>) {
     activityViewModel.onDestroy()
     activityViewModels.remove { it.value == activityViewModel }
   }
+  fun destroy(fragmentViewModel: FragmentViewModel<*>) {
+    fragmentViewModel.onDetach()
+    activityViewModels.remove { it.value == fragmentViewModel }
+  }
 
-  private fun findId(state: Bundle?): String {
-    return if (state !== null) state.getString(KEY_VIEW_MODEL_ID)
+  private fun findId(state: Bundle?, keyId: String): String {
+    return if (state !== null) state.getString(keyId)
     else UUID.randomUUID().toString()
   }
 
   private fun findIdForViewModel(activityViewModel: ActivityViewModel<*>): String {
     try {
-      return activityViewModels.entries.find { it.value == activityViewModel }?.key!!
+      return activityViewModels.entries.find { it.value == activityViewModel }!!.key
     } catch (ex: NullPointerException) {
       throw RuntimeException("No view model in the map!")
     }
   }
 
-  private fun <T : ActivityViewModel<out LifecycleActivityType>> createActivityViewModel(
+  private fun findIdForViewModel(fragmentViewModel: FragmentViewModel<*>): String {
+    try {
+      return fragmentViewModels.entries.find { it.value == fragmentViewModel }!!.key
+    } catch (ex: NullPointerException) {
+      throw RuntimeException("No view model in the map!")
+    }
+  }
+
+  private fun <T : ActivityViewModel<out LifecycleActivityType>> createViewModel(
       @ApplicationContext context: Context, clazz: Class<T>, state: Bundle?, id: String)
       : ActivityViewModel<out LifecycleActivityType> {
     val params = (context as MaosApplication).component.viewModelParams()
@@ -115,7 +146,35 @@ object ViewModelManager {
       throw RuntimeException(ex) // exception from newInstance(params)
     }
     activityViewModels.put(id, viewModel)
-    viewModel.onCreate(state.findMaybeNull(KEY_VIEW_MODEL_STATE))
+    viewModel.onCreate(state.findMaybeNull(KEY_ACTIVITY_VIEW_MODEL_STATE))
+
+    return viewModel
+  }
+
+  private fun <T : FragmentViewModel<out LifecycleFragmentType>> createViewModel(
+      @ApplicationContext context: Context, clazz: Class<T>, state: Bundle?, id: String)
+      : FragmentViewModel<out LifecycleFragmentType> {
+    val params = (context as MaosApplication).component.viewModelParams()
+    val viewModel: FragmentViewModel<out LifecycleFragmentType>
+
+    try {
+      val constructor = clazz.getConstructor(ViewModelParams::class.java)
+      viewModel = constructor!!.newInstance(params) as FragmentViewModel<out LifecycleFragmentType>
+    } catch (ex: NullPointerException) {
+      throw RuntimeException(ex) // if the constructor null
+    } catch (ex: IllegalAccessException) {
+      throw RuntimeException(ex) // exception from newInstance(params)
+    } catch (ex: IllegalArgumentException) {
+      throw RuntimeException(ex) // exception from newInstance(params)
+    } catch (ex: InstantiationException) {
+      throw RuntimeException(ex) // exception from newInstance(params)
+    } catch (ex: InvocationTargetException) {
+      throw RuntimeException(ex) // exception from newInstance(params)
+    } catch (ex: ExceptionInInitializerError) {
+      throw RuntimeException(ex) // exception from newInstance(params)
+    }
+    fragmentViewModels.put(id, viewModel)
+    viewModel.onCreate(state.findMaybeNull(KEY_FRAGMENT_VIEW_MODEL_STATE))
 
     return viewModel
   }

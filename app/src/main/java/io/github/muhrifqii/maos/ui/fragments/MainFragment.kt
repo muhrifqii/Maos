@@ -21,6 +21,8 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import io.github.muhrifqii.maos.R
+import io.github.muhrifqii.maos.libs.extensions.inflate
 
 /**
  * Created on   : 24/01/17
@@ -31,9 +33,9 @@ import android.view.ViewGroup
  */
 class MainFragment : Fragment() {
 
-
   override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
-    return super.onCreateView(inflater, container, savedInstanceState)
+    val view = container!!.inflate(R.layout.home_fragment)
+    return view
   }
 }

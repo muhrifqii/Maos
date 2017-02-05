@@ -39,9 +39,9 @@ where TheView : LifecycleActivityType {
   private val viewChange: PublishSubject<LifecycleActivityType> = PublishSubject.create()
   private val view: Observable<TheView> =
       viewChange.filter { it !is EmptyLifecycleActivityType }.map { it as TheView }
-  private val disposables: CompositeDisposable = CompositeDisposable()
   private val activityResult: PublishSubject<MaosActivityResult> = PublishSubject.create()
   private val intent: PublishSubject<Intent> = PublishSubject.create()
+  protected val disposables: CompositeDisposable = CompositeDisposable()
 
   fun setActivityResult(activityResult: MaosActivityResult) =
       this.activityResult.onNext(activityResult)

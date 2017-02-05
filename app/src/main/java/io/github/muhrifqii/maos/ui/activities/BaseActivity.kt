@@ -64,7 +64,8 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleActivi
     super.onStart()
     Timber.d("OnStart on $this")
     if (VERSION.SDK_INT >= VERSION_CODES.N) {
-      viewModel?.onDropView()
+      attachViewModel(null)
+      viewModel?.onTakeView(this)
     }
     back.bindToLifecycle(this).observeOn(AndroidSchedulers.mainThread())
         .subscribe { back() }
@@ -74,6 +75,7 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleActivi
     super.onResume()
     Timber.d("OnResume on $this")
     if (VERSION.SDK_INT < VERSION_CODES.N) {
+      attachViewModel(null)
       viewModel?.onTakeView(this)
     }
   }
@@ -111,7 +113,7 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleActivi
     val viewModelBundle = Bundle()
     if (viewModel !== null) {
       // this one is strange, viewModel already checked if it is nonnull type
-      ViewModelManager.saveActivity(viewModel!!, viewModelBundle)
+      ViewModelManager.save(viewModel!!, viewModelBundle)
     }
     outState.putBundle(VIEWMODEL_KEY_TO_BUNDLE, viewModelBundle)
   }
@@ -167,7 +169,7 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleActivi
 
   private fun attachViewModel(bundle: Bundle?) {
     if (viewModel === null) viewModel =
-        ViewModelManager.findActivity(applicationContext, viewModelClass(),
+        ViewModelManager.find(applicationContext, viewModelClass(),
             bundle.findMaybeNull(VIEWMODEL_KEY_TO_BUNDLE))
 
   }

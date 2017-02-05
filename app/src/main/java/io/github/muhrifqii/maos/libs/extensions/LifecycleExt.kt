@@ -18,8 +18,10 @@ package io.github.muhrifqii.maos.libs.extensions
 
 import com.trello.rxlifecycle2.android.ActivityEvent
 import io.github.muhrifqii.maos.libs.ActivityViewModel
+import io.github.muhrifqii.maos.libs.FragmentViewModel
 import io.github.muhrifqii.maos.libs.LifecycleType
 import io.github.muhrifqii.maos.libs.LifecycleActivityType
+import io.github.muhrifqii.maos.libs.LifecycleFragmentType
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
@@ -54,3 +56,17 @@ fun Completable.bindToLifecycle(provider: ActivityViewModel<LifecycleActivityTyp
     this.compose(provider.bindToLifecycle<Completable>())
 
 // These transformer are for FragmentViewModel
+fun <T> Observable<T>.bindToLifecycle(provider: FragmentViewModel<LifecycleFragmentType>) =
+    this.compose<T>(provider.bindToLifecycle())
+
+fun <T> Flowable<T>.bindToLifecycle(provider: FragmentViewModel<LifecycleFragmentType>) =
+    this.compose<T>(provider.bindToLifecycle())
+
+fun <T> Single<T>.bindToLifecycle(provider: FragmentViewModel<LifecycleFragmentType>) =
+    this.compose<T>(provider.bindToLifecycle())
+
+fun <T> Maybe<T>.bindToLifecycle(provider: FragmentViewModel<LifecycleFragmentType>) =
+    this.compose<T>(provider.bindToLifecycle())
+
+fun Completable.bindToLifecycle(provider: FragmentViewModel<LifecycleFragmentType>) =
+    this.compose(provider.bindToLifecycle<Completable>())

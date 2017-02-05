@@ -19,6 +19,7 @@ package io.github.muhrifqii.maos.ui.activities
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import io.github.muhrifqii.maos.R
+import io.github.muhrifqii.maos.viewmodels.MainViewModel
 
 /**
  * Created on   : 21/01/17
@@ -28,7 +29,7 @@ import io.github.muhrifqii.maos.R
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity<MainViewModel>() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -37,5 +38,13 @@ class MainActivity : AppCompatActivity() {
 
   override fun onDestroy() {
     super.onDestroy()
+  }
+
+  override fun viewModelClass(): Class<MainViewModel> {
+    return MainViewModel::class.java
+  }
+
+  override fun finishActivityTransition(): Pair<Int, Int>? {
+    return null
   }
 }
