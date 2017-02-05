@@ -16,8 +16,10 @@
 
 package io.github.muhrifqii.maos.ui.activities
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.BottomNavigationView
+import butterknife.BindView
+import butterknife.ButterKnife
 import io.github.muhrifqii.maos.R
 import io.github.muhrifqii.maos.viewmodels.MainViewModel
 
@@ -31,9 +33,13 @@ import io.github.muhrifqii.maos.viewmodels.MainViewModel
 
 class MainActivity : BaseActivity<MainViewModel>() {
 
+  @BindView(R.id.main_bottom_nav_view)
+  lateinit var bottomNav: BottomNavigationView
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+    ButterKnife.bind(this)
   }
 
   override fun onDestroy() {

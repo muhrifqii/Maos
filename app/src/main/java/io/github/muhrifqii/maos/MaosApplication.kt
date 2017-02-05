@@ -17,6 +17,7 @@
 package io.github.muhrifqii.maos
 
 import android.app.Application
+import butterknife.ButterKnife
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 import timber.log.Timber
@@ -40,6 +41,7 @@ class MaosApplication : Application() {
     if (BuildConfig.DEBUG) {
       Timber.plant(Timber.DebugTree())
       refwatcher = LeakCanary.install(this)
+      ButterKnife.setDebug(true)
     }
     component = DaggerAppComponent.builder().appModule(AppModule(this)).build()
   }
