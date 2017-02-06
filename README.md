@@ -4,13 +4,15 @@
 [![PRs Welcome](https://img.shields.io/badge/prs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
 ## Prerequisites
-You have to understand the concept of Reactive Programming
-- [Kotlin (1.0.6](https://github.com/JetBrains/kotlin)
+Need to understand the very basic syntax of kotlin
+- [Kotlin (1.0.6)](https://github.com/JetBrains/kotlin)
+
+Have to understand the concept of Reactive Programming
 - [RxJava2 (2.0.4)](https://github.com/ReactiveX/RxJava/tree/2.x)
 - [RxAndroid2 (2.0.1)](https://github.com/ReactiveX/RxAndroid/tree/2.x)
 - [RxLifecycle (2.0.1)](https://github.com/trello/RxLifecycle/tree/2.x)
 
-And also the concept of Dependency Injection
+Also the concept of Dependency Injection
 - [Dagger2 (2.8)](https://github.com/google/dagger)
 
 And the most used network lib
