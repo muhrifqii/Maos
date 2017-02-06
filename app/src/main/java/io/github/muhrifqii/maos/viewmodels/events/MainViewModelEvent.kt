@@ -14,12 +14,7 @@
  *    limitations under the License.
  */
 
-package io.github.muhrifqii.maos.viewmodels
-
-import io.github.muhrifqii.maos.libs.FragmentViewModel
-import io.github.muhrifqii.maos.libs.ViewModelParams
-import io.github.muhrifqii.maos.ui.fragments.MainFragment
-import io.github.muhrifqii.maos.viewmodels.events.MainFragmentViewModelEvent
+package io.github.muhrifqii.maos.viewmodels.events
 
 /**
  * Created on   : 06/02/17
@@ -28,13 +23,12 @@ import io.github.muhrifqii.maos.viewmodels.events.MainFragmentViewModelEvent
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-class MainFragmentViewModel(params: ViewModelParams) : FragmentViewModel<MainFragment>(params),
-    MainFragmentViewModelEvent.Cause, MainFragmentViewModelEvent.Result {
+interface MainViewModelEvent {
+  interface Cause{
 
-  val cause: MainFragmentViewModelEvent.Cause = this
-  val result: MainFragmentViewModelEvent.Result = this
+  }
 
-  init {
+  interface Result{
 
   }
 }
