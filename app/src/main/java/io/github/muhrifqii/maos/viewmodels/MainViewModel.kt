@@ -11,7 +11,7 @@ import io.github.muhrifqii.maos.ui.activities.MainActivity
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-class MainViewModel(params: ViewModelParams):ActivityViewModel<MainActivity>(params) {
+class MainViewModel(params: ViewModelParams) : ActivityViewModel<MainActivity>(params) {
 
 
 }

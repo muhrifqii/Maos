@@ -22,7 +22,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.github.muhrifqii.maos.R
+import io.github.muhrifqii.maos.libs.LifecycleFragmentType
 import io.github.muhrifqii.maos.libs.extensions.inflate
+import io.github.muhrifqii.maos.viewmodels.MainFragmentViewModel
 
 /**
  * Created on   : 24/01/17
@@ -31,11 +33,23 @@ import io.github.muhrifqii.maos.libs.extensions.inflate
  * Github       : https://github.com/muhrifqii
  * LinkedIn     : https://linkedin.com/in/muhrifqii
  */
-class MainFragment : Fragment() {
+class MainFragment(position: Int) : BaseFragment<MainFragmentViewModel>(), LifecycleFragmentType {
+
+  val KEY_ARGS_POSITION = "key-args-to-position"
+
+  init {
+    arguments = Bundle().apply {
+      putInt(KEY_ARGS_POSITION, position)
+    }
+  }
 
   override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
     val view = container!!.inflate(R.layout.home_fragment)
     return view
+  }
+
+  override fun viewModelClass(): Class<MainFragmentViewModel> {
+    return MainFragmentViewModel::class.java
   }
 }
