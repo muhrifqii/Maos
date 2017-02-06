@@ -3,6 +3,27 @@
 [![Kotlin](https://img.shields.io/badge/kotlin-1.0.6-blue.svg)](http://kotlinlang.org)
 [![PRs Welcome](https://img.shields.io/badge/prs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
+## Prerequisites
+You have to understand the concept of Reactive Programming
+- [Kotlin (1.0.6](https://github.com/JetBrains/kotlin)
+- [RxJava2 (2.0.4)](https://github.com/ReactiveX/RxJava/tree/2.x)
+- [RxAndroid2 (2.0.1)](https://github.com/ReactiveX/RxAndroid/tree/2.x)
+- [RxLifecycle (2.0.1)](https://github.com/trello/RxLifecycle/tree/2.x)
+
+And also the concept of Dependency Injection
+- [Dagger2 (2.8)](https://github.com/google/dagger)
+
+And the most used network lib
+- [OkHttp (3.6.0)](https://github.com/square/okhttp)
+- [Retrofit (2.1.0)](https://github.com/square/retrofit)
+
+And others
+- [Moshi (1.4.0)](https://github.com/square/moshi)
+- [SimpleXml (2.7.1)](http://simple.sourceforge.net/download/stream/doc/tutorial/tutorial.php#scatter)
+- [LeakCanary (1.5)](https://github.com/square/leakcanary)
+- [Butterknife (8.5.1)](https://github.com/JakeWharton/butterknife)
+- [Timber (4.5.1)](https://github.com/JakeWharton/timber)
+
 ## License
     Copyright 2017 Muhammad Rifqi Fatchurrahman Putra Danar
 
