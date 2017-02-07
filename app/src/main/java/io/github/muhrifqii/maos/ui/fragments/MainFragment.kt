@@ -18,9 +18,12 @@ package io.github.muhrifqii.maos.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import butterknife.BindView
 import io.github.muhrifqii.maos.R
 import io.github.muhrifqii.maos.libs.LifecycleFragmentType
 import io.github.muhrifqii.maos.libs.extensions.inflate
@@ -36,6 +39,8 @@ import io.github.muhrifqii.maos.viewmodels.MainFragmentViewModel
 class MainFragment(position: Int) : BaseFragment<MainFragmentViewModel>(), LifecycleFragmentType {
 
   val KEY_ARGS_POSITION = "key-args-to-position"
+  @BindView(R.id.home_swipe_refresh_layout) lateinit var swipeRefreshLayout: SwipeRefreshLayout
+  @BindView(R.id.recycler_view) lateinit var recyclerView: RecyclerView
 
   init {
     arguments = Bundle().apply {

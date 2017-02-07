@@ -3,6 +3,8 @@
 [![Kotlin](https://img.shields.io/badge/kotlin-1.0.6-blue.svg)](http://kotlinlang.org)
 [![PRs Welcome](https://img.shields.io/badge/prs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
+A sample android app written in kotlin language using mvvm pattern. A fully functional and reactive sample with the help of dagger2 dependency injection.
+
 ## Prerequisites
 Need to understand the very basic syntax of kotlin
 - [Kotlin (1.0.6)](https://github.com/JetBrains/kotlin)

@@ -18,6 +18,7 @@ package io.github.muhrifqii.maos.ui.activities
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.view.MenuItem
 import butterknife.BindView
 import butterknife.ButterKnife
 import io.github.muhrifqii.maos.R
@@ -40,6 +41,11 @@ class MainActivity : BaseActivity<MainViewModel>() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     ButterKnife.bind(this)
+    bottomNav.setOnNavigationItemSelectedListener {
+      when(it.itemId){
+
+      }
+    }
   }
 
   override fun onDestroy() {
