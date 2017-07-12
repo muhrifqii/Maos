@@ -133,7 +133,7 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleActivi
   override fun onBackPressed() = back.onNext(Unit)
 
   /**
-   * @return Dagger component
+   * Dagger component
    */
   protected fun appComponent() = (application as MaosApplication).component
 
@@ -147,13 +147,13 @@ abstract class BaseActivity<TheViewModel : ActivityViewModel<out LifecycleActivi
   }
 
   /**
-   * @return The ViewModel java class
+   * The ViewModel java class
    */
   abstract fun viewModelClass(): Class<TheViewModel>
 
   /**
    * Activity finish transition animation
-   * @return enterAnim, exitAnim
+   * enterAnim, exitAnim
    */
   abstract fun finishActivityTransition(): Pair<Int, Int>?
 

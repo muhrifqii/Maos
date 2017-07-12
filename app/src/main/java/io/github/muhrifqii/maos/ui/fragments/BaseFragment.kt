@@ -93,7 +93,7 @@ abstract class BaseFragment<TheViewModel : FragmentViewModel<out LifecycleFragme
   }
 
   /**
-   * @return The ViewModel java class
+   * The ViewModel java class
    */
   abstract fun viewModelClass(): Class<TheViewModel>
 

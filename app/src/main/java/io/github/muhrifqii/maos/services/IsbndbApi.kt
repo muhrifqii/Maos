@@ -33,15 +33,15 @@ import retrofit2.http.Query
  */
 interface IsbndbApi {
   /**
-   * @param key isbn10 or isbn13 or isbndb_id
+   * param key isbn10 or isbn13 or isbndb_id
    */
   @GET("/book/{key}") // need to test this
   @Wrapped("data") @FirstElement fun aBook(@Path("key") key: String) : Observable<Book>
 
   /**
-   * @param query a search query
-   * @param type null for query by title
-   * @param page null for page 1
+   * param query a search query
+   * param type null for query by title
+   * param page null for page 1
    */
   @GET("/books")
   @Wrapped("data") fun booksBy(@Query("q") query: String,

@@ -41,7 +41,7 @@ inline fun <reified T : Parcelable> createParcel(crossinline createFromParcel: (
 
 /**
  * Optional find to a particular key on Bundle
- * @return optional value
+ * return optional value
  */
 inline fun <reified T> Bundle?.findMaybeNull(key: String): T? {
   if (this === null) {
