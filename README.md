@@ -3,10 +3,10 @@
 [![Kotlin](https://img.shields.io/badge/kotlin-1.0.6-blue.svg)](http://kotlinlang.org)
 [![PRs Welcome](https://img.shields.io/badge/prs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-A sample android app written in kotlin language using mvvm pattern. A fully functional and reactive sample with the help of dagger2 dependency injection.
+A sample android application written in kotlin language using mvvm pattern. There a fully functional and reactive sample with the help of dagger2 dependency injection.
 
 ## Prerequisites
-Need to understand the very basic syntax of kotlin
+Need to understand the basic syntax of kotlin
 - [Kotlin (1.0.6)](https://github.com/JetBrains/kotlin)
 
 Have to understand the concept of Reactive Programming
@@ -17,7 +17,7 @@ Have to understand the concept of Reactive Programming
 Also the concept of Dependency Injection
 - [Dagger2 (2.8)](https://github.com/google/dagger)
 
-And the most used network lib
+And the most used network libraries
 - [OkHttp (3.6.0)](https://github.com/square/okhttp)
 - [Retrofit (2.1.0)](https://github.com/square/retrofit)
 
